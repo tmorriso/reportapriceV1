@@ -8,3 +8,16 @@ git clean -f
 
 git reset --hard <version number>
 *This will reset the app to the version number specified*
+
+Pushing a change to the master branch
+git add <file name>
+
+or
+
+git add -a
+(*Adds all changes to staging*)
+git commit -m "Add file"
+git push origin master
+
+
+
