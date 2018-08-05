@@ -1,0 +1,10 @@
+Notes for Report a Price....
+
+Github
+How to reset to an old version of the app..
+
+git clean -f 
+*This will remove all untracked files, if there are any which git reset will not do*
+
+git reset --hard <version number>
+*This will reset the app to the version number specified*
