@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 import unittest
 from app import app, db
-from app.models import User, Post
+from app.models import User, Post, Company, Service
 
 class UserModelCase(unittest.TestCase):
     def setUp(self):
@@ -47,6 +47,7 @@ class UserModelCase(unittest.TestCase):
         self.assertEqual(u1.followed.count(), 0)
         self.assertEqual(u2.followers.count(), 0)
 
+
     def test_follow_posts(self):
         # create four users
         u1 = User(username='john', email='john@example.com')
@@ -84,6 +85,33 @@ class UserModelCase(unittest.TestCase):
         self.assertEqual(f2, [p2, p3])
         self.assertEqual(f3, [p3, p4])
         self.assertEqual(f4, [p4])
+
+    def test_service_add_company(self):
+        # create service
+        s1 = Service(parent_id=1, title='Fence Painting')
+        db.session.add(s1)
+        db.session.commit()
+
+        # create company
+        c1 = Company(company_name='Paint Team', company_address='123 Main St.',
+         company_website='Paintteam.com', company_phone_number='2086783456', company_email='PaintTeam@example.com')
+        db.session.add(c1)
+        db.session.commit()
+
+        # add company to service
+        #check1 = s1.add_company(c1)
+        check1 = s1.companies.append(c1)
+        db.session.commit()
+
+        # check that the connection was made
+        #self.assertEqual(s1.companies.count(), 1)
+
+        self.assertEqual(s1.companies.first().company_name, 'Paint Team')
+        # self.assertEqual(s1.companies_services.count(), 1)
+        # self.assertEqual(s1.companies_services.first().company_name, 'Paint Team')
+   
+
+
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)

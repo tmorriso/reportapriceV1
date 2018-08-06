@@ -84,17 +84,15 @@ class Service(db.Model):
     posts = db.relationship('Post', backref='service', lazy='dynamic')
     companies = db.relationship(
         'Company', secondary=companies_services,
-        primaryjoin=(companies_services.c.service_id == id),
-        secondaryjoin=(companies_services.c.company_id == id),
-        backref=db.backref('services', lazy='dynamic'), lazy='dynamic')
+        backref=db.backref('companies_services', lazy='dynamic'))
 
     def add_company(service, company):
         if not service.is_offered(company):
             service.companies.append(company)
 
     def remove_company(service, company):
-        if service.is_offered(user):
-            service.companies.remove(user)
+        if service.is_offered(company):
+            service.companies.remove(company)
 
     def is_offered(service, company):
         return service.companies.filter(
