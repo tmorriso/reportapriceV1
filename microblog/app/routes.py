@@ -14,7 +14,9 @@ from datetime import datetime
 def index():
     form = PostForm()
     if form.validate_on_submit():
-        post = Post(body=form.post.data, author=current_user, service_id=form.service.data, company=form.company.data)
+        post = Post(body=form.post.data, author=current_user, 
+            service_id=form.service.data, company_id=form.company.data, 
+            price=form.price.data, rating=form.rating.data)
         db.session.add(post)
         db.session.commit()
         flash('Your post is now live!')

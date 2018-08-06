@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, SubmitField, SelectField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, SubmitField, SelectField, DecimalField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
 from app.models import User
 
@@ -43,8 +43,12 @@ class EditProfileForm(FlaskForm):
                 raise ValidationError('Please use a different username.')
 
 class PostForm(FlaskForm):
-    post = TextAreaField('Say something', validators=[
-        DataRequired(), Length(min=1, max=140)])
     service = SelectField('Select a Service', choices = [('3', 'Exterior House Painting')])
+    company = SelectField('Select a Company', choices = [('3', 'Paint Life')])
+    price = DecimalField('What price did you pay?')
+    rating = SelectField('Leave a rating ', choices = [('1', '1 Star'), ('2', '2 Stars'), ('3', '3 Stars'), ('4', ' 4 Stars'), ('5', '5 Stars')])
+    post = TextAreaField('Leave a Review', validators=[
+        DataRequired(), Length(min=1, max=140)])
     
+
     submit = SubmitField('Submit')
