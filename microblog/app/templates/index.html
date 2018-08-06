@@ -8,6 +8,8 @@
         <p>
             {{ form.post.label }}<br>
             {{ form.post(cols=32, rows=4) }}<br>
+            {{ form.service.label }}<br>
+            {{ form.service(cols=32, rows=4) }}<br>
             {% for error in form.post.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}

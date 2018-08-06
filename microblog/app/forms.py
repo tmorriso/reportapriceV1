@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, SubmitField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, SubmitField, SelectField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
 from app.models import User
 
@@ -45,4 +45,6 @@ class EditProfileForm(FlaskForm):
 class PostForm(FlaskForm):
     post = TextAreaField('Say something', validators=[
         DataRequired(), Length(min=1, max=140)])
+    service = SelectField('Select a Service', choices = [('3', 'Exterior House Painting')])
+    
     submit = SubmitField('Submit')

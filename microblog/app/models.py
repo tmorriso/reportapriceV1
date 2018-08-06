@@ -61,12 +61,46 @@ class User(UserMixin, db.Model):
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    price = db.Column(db.Float)
+    rating = db.Column(db.Integer)
     body = db.Column(db.String(140))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    service_id = db.Column(db.Integer, db.ForeignKey('service.id'))
+    company_id = db.Column(db.Integer, db.ForeignKey('company.id'))
 
     def __repr__(self):
         return '<Post {}>'.format(self.body)
+
+class Service(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    parent_id = db.Column(db.Integer)
+    title = db.Column(db.String(120))
+    posts = db.relationship('Post', backref='service', lazy='dynamic')
+
+    def __repr__(self):
+        return '<Service {}>'.format(self.title)
+
+class Service_Attributes(db.Model):
+    id = db.Column(db.Integer, primary_key=True) 
+    attribute = db.Column(db.String(120))
+    value = db.Column(db.String(120))
+   
+    def __repr__(self):
+        return '<Service_Attributes {}>'.format(self.value)
+
+class Company(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    company_name = db.Column(db.String(120))
+    company_address = db.Column(db.String(120))
+    company_website = db.Column(db.String(120))
+    company_phone_number = db.Column(db.String(120))
+    company_email = db.Column(db.String(120))
+    posts = db.relationship('Post', backref='company', lazy='dynamic')
+
+    def __repr__(self):
+        return '<Company {}>'.format(self.company_name)
+
 
 @login.user_loader
 def load_user(id):
