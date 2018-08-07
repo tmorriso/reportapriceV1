@@ -85,6 +85,7 @@ class Service(db.Model):
     companies = db.relationship(
         'Company', secondary=companies_services,
         backref=db.backref('services', lazy='dynamic'), lazy='dynamic')
+    service_attributes = db.relationship('Service_Attributes', backref='service', lazy='dynamic')
 
     def add_company(service, company):
         if not service.is_offered(company):
@@ -106,6 +107,8 @@ class Service_Attributes(db.Model):
     id = db.Column(db.Integer, primary_key=True) 
     attribute = db.Column(db.String(120))
     value = db.Column(db.String(120))
+    service_id = db.Column(db.Integer, db.ForeignKey('service.id'))
+
    
     def __repr__(self):
         return '<Service_Attributes {}>'.format(self.value)

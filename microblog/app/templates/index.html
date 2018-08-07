@@ -1,8 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Hi, {{ current_user.username }}!</h1>
+   
     {% if form %}
+    <h1>Hi, {{ current_user.username }}!</h1>
+    <h3> Please help us grow out database of prices! <br> You can submit a price you paid for a service you recieved to help our community! <br> Happy reporting!</h3>
     <form action="" method="post">
         {{ form.hidden_tag() }}
         <p>

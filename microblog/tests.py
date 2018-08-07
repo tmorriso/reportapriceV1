@@ -86,6 +86,9 @@ class UserModelCase(unittest.TestCase):
         self.assertEqual(f3, [p3, p4])
         self.assertEqual(f4, [p4])
 
+    # def test_links_with_post(self):
+    #     p = Post(price='150.50', rating='5', body='Best Ever', author=1, service=1, company=1)
+
     def test_service_add_company(self):
         # create service
         s1 = Service(parent_id=1, title='plumbing')
@@ -125,6 +128,8 @@ class UserModelCase(unittest.TestCase):
         # check that the connection was made
         self.assertEqual(c2.services.count(), 1)
         self.assertEqual(c2.services.first().title, 'plumbing')
+
+
    
 
 
