@@ -88,27 +88,43 @@ class UserModelCase(unittest.TestCase):
 
     def test_service_add_company(self):
         # create service
-        s1 = Service(parent_id=1, title='Fence Painting')
+        s1 = Service(parent_id=1, title='plumbing')
+        s2 = Service(parent_id=2, title='electrical')
         db.session.add(s1)
+        db.session.add(s2)
         db.session.commit()
 
         # create company
         c1 = Company(company_name='Paint Team', company_address='123 Main St.',
          company_website='Paintteam.com', company_phone_number='2086783456', company_email='PaintTeam@example.com')
+        c2 = Company(company_name='Bob Team', company_address='123 Main St.',
+         company_website='Paintteam.com', company_phone_number='2086783456', company_email='PaintTeam@example.com')
         db.session.add(c1)
+        db.session.add(c2)
         db.session.commit()
 
         # add company to service
-        #check1 = s1.add_company(c1)
-        check1 = s1.companies.append(c1)
+        check1 = s1.add_company(c1)
+        db.session.commit()
+        check2 = s2.add_company(c1)
         db.session.commit()
 
         # check that the connection was made
-        #self.assertEqual(s1.companies.count(), 1)
-
+        self.assertEqual(c1.services.count(), 2)
         self.assertEqual(s1.companies.first().company_name, 'Paint Team')
-        # self.assertEqual(s1.companies_services.count(), 1)
-        # self.assertEqual(s1.companies_services.first().company_name, 'Paint Team')
+
+        # remove companies
+        check3 = s2.remove_company(c1)
+
+        # check that it was removed
+        self.assertEqual(c1.services.count(), 1)
+
+        # add services to company
+        check4 = c2.services.append(s1)
+
+        # check that the connection was made
+        self.assertEqual(c2.services.count(), 1)
+        self.assertEqual(c2.services.first().title, 'plumbing')
    
 
 

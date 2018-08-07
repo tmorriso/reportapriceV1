@@ -4,8 +4,10 @@ from app import app, db
 from app.models import User, Post, Company, Service
 
 # create service
-s1 = Service(parent_id=1, title='Fence Painting')
+s1 = Service(parent_id=2, title='Fence Staining')
+s2 = Service(parent_id=2, title='Trim Paint')
 db.session.add(s1)
+db.session.add(s2)
 db.session.commit()
 
 # create company
@@ -16,6 +18,14 @@ db.session.commit()
 
 # add company to service
 #check1 = s1.add_company(c1)
-check1 = s1.companies.append(c1)
+check1 = c1.services.append(s1)
+check2 = c1.services.append(s2)
 db.session.commit()
 
+test = c1.services.count()
+# test2 = s1.companies.count()
+print(c1.services.all())
+print(s1.companies.all())
+# test2 = s1.companies.count()
+print(test)
+# print(test2)

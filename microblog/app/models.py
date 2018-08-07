@@ -84,7 +84,7 @@ class Service(db.Model):
     posts = db.relationship('Post', backref='service', lazy='dynamic')
     companies = db.relationship(
         'Company', secondary=companies_services,
-        backref=db.backref('companies_services', lazy='dynamic'))
+        backref=db.backref('services', lazy='dynamic'), lazy='dynamic')
 
     def add_company(service, company):
         if not service.is_offered(company):
