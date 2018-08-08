@@ -12,10 +12,6 @@ from datetime import datetime
 @app.route('/index', methods=['GET', 'POST'])
 @login_required
 def index():
-    if current_user.is_authenticated:
-        author = current_user 
-    else:
-        author = "Anonymous"
     form = PostForm()
     if form.validate_on_submit():
         post = Post(body=form.post.data, author=author, 
