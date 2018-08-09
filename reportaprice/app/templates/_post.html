@@ -1,11 +1,23 @@
 <table>
 	<tr valign="top">
+		{% if post.author %}
 	    <td><img src="{{ post.author.avatar(36) }}"></td>
+	    {% endif %}
 	    <td>
+	    	
+	        Price: ${{ post.price }}<br>
+	        Service: {{ post.service.title }}<br>
+	        Company: {{ post.company.company_name }}<br>
+	        Review: {{ post.body }}<br>
+	        Reported by:
+	        {% if post.author %}
 	        <a href="{{ url_for('user', username=post.author.username) }}">
-	            {{ post.author.username }}
-	        </a>
-	        says:<br>{{ post.body }}
+	            {{ post.author.username }}</a> on {{post.timestamp}}<br><br>
+	        {% else %}
+
+	    	Anonymous on {{post.timestamp}}<br><br>
+	        {% endif %}
+	        
 	    </td>
 	</tr>
 </table>

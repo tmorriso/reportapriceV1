@@ -2,9 +2,9 @@
 
 {% block content %}
    
-   <!--  {% if form %}
-    <h1>Hi, {{ current_user.username }}!</h1>
-    <h3> Please help us grow out database of prices! <br> You can submit a price you paid for a service you recieved to help our community! <br> Happy reporting!</h3>
+    {% if form %}
+    <h1>Report a price</h1>
+    <p> Submit a price you paid for a service you recieved.</p>
     <form action="" method="post">
         {{ form.hidden_tag() }}
         <p>
@@ -25,14 +25,6 @@
         </p>
         <p>{{ form.submit() }}</p>
     </form>
-    {% endif %} -->
-    {% for post in posts %}
-        {% include '_post.html' %}
-    {% endfor %}
-    {% if prev_url %}
-    <a href="{{ prev_url }}">Newer posts</a>
     {% endif %}
-    {% if next_url %}
-    <a href="{{ next_url }}">Older posts</a>
-    {% endif %}
+   
 {% endblock %}

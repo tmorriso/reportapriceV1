@@ -43,8 +43,9 @@ class EditProfileForm(FlaskForm):
                 raise ValidationError('Please use a different username.')
 
 class PostForm(FlaskForm):
-    service = SelectField('Select a Service', choices = [('3', 'Exterior House Painting')])
-    company = SelectField('Select a Company', choices = [('3', 'Paint Life')])
+    service = SelectField('Select a Service', choices = [('1', 'Conventional Oil Change'), ('2', 'Synthetic Blend Oil Change'), 
+        ('3', 'Full Synthetic Oil Change'), ('4', 'High-Mileage Oil Change')])
+    company = SelectField('Select a Company', choices = [('1', 'Jiffy Lube'), ('2', 'Einsteins Oilery'), ('3','Rogers Northside Garage')])
     price = DecimalField('What price did you pay?')
     rating = SelectField('Leave a rating ', choices = [('1', '1 Star'), ('2', '2 Stars'), ('3', '3 Stars'), ('4', ' 4 Stars'), ('5', '5 Stars')])
     post = TextAreaField('Leave a Review', validators=[
