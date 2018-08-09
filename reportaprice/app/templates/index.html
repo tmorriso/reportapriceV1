@@ -1,31 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
-   
-   <!--  {% if form %}
-    <h1>Hi, {{ current_user.username }}!</h1>
-    <h3> Please help us grow out database of prices! <br> You can submit a price you paid for a service you recieved to help our community! <br> Happy reporting!</h3>
-    <form action="" method="post">
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.service.label }}<br>
-            {{ form.service(cols=32, rows=4) }}<br>
-            {{ form.company.label }}<br>
-            {{ form.company(cols=32, rows=4) }}<br>
-            {{ form.price.label }}<br>
-            {{ form.price(cols=32, rows=4) }}<br>
-            {{ form.rating.label }}<br>
-            {{ form.rating(cols=32, rows=4) }}<br>
-            {{ form.post.label }}<br>
-            {{ form.post(cols=32, rows=4) }}<br>
-            
-            {% for error in form.post.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>{{ form.submit() }}</p>
-    </form>
-    {% endif %} -->
+
+<h1>Find a Price</h1>
     {% for post in posts %}
         {% include '_post.html' %}
     {% endfor %}
@@ -35,4 +12,5 @@
     {% if next_url %}
     <a href="{{ next_url }}">Older posts</a>
     {% endif %}
+
 {% endblock %}

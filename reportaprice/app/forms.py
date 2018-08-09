@@ -53,3 +53,4 @@ class PostForm(FlaskForm):
     
 
     submit = SubmitField('Submit')
+
