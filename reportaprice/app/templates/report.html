@@ -1,30 +1,13 @@
 {% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
 
-{% block content %}
+{% block app_content %}
    
     {% if form %}
     <h1>Report a price</h1>
     <p> Submit a price you paid for a service you recieved.</p>
-    <form autocomplete="off" action="" method="post">
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.service.label }}<br>
-            {{ form.service(cols=32, rows=4) }}<br>
-            {{ form.company.label }}<br>
-            {{ form.company(cols=32, rows=4) }}<br> 
-            {{ form.price.label }}<br>
-            {{ form.price(cols=32, rows=4) }}<br>
-            {{ form.rating.label }}<br>
-            {{ form.rating(cols=32, rows=4) }}<br>
-            {{ form.post.label }}<br>
-            {{ form.post(cols=32, rows=4) }}<br>
-            
-            {% for error in form.post.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>{{ form.submit() }}</p>
-    </form>
+     {{ wtf.quick_form(form) }}
+    <br>
     {% endif %}
    
 {% endblock %}

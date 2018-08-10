@@ -55,7 +55,7 @@ class PostForm(FlaskForm):
     submit = SubmitField('Submit')
 
 class ExploreForm(FlaskForm):
-    zip_code = IntegerField('Enter your zipcode')
+    zip_code = IntegerField('Filter by zipcode')
     service = SelectField('Filter by Service', choices = [('1', 'Conventional Oil Change'), ('2', 'Synthetic Blend Oil Change'), 
         ('3', 'Full Synthetic Oil Change'), ('4', 'High-Mileage Oil Change')])
     
