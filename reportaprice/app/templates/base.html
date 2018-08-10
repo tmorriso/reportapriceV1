@@ -1,15 +1,16 @@
-{% extends 'bootstrap/base.html' %}
-
-{% block title %}
-    {% if title %}{{ title }} - Reportaprice{% else %}Welcome to Reportaprice{% endif %}
-{% endblock %}
-
+<html>
+    <head>
+        {% if title %}
+        <title>{{ title }} - reportaprice</title>
+        {% else %}
+        <title>reportaprice</title>
+        {% endif %}
     </head>
     <body>
         <div>
-          <a href="{{ url_for('index') }}">Live Feed</a>
+          <a href="{{ url_for('index') }}">Find a Price</a>
           <a href="{{ url_for('report') }}">Report a Price</a>
-          <a href="{{ url_for('find', service='test') }}">Find a Price</a>
+          
           {% if current_user.is_anonymous %}
           <a href="{{ url_for('login') }}">Login</a>
           {% else %}
