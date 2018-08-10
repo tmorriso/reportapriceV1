@@ -9,7 +9,7 @@
 		<h1>Live Feed</h1>
 	{% endif %}
 
-{{ wtf.quick_form(form) }}
+{{ wtf.quick_form(form, form_type="inline") }}
 <br>
     {% for post in posts %}
         	{% include '_post.html' %}
