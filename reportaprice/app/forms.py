@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, SubmitField, SelectField, DecimalField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, SubmitField, SelectField, DecimalField,IntegerField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
 from app.models import User
 
@@ -54,3 +54,10 @@ class PostForm(FlaskForm):
 
     submit = SubmitField('Submit')
 
+class ExploreForm(FlaskForm):
+    zip_code = IntegerField('Enter your zipcode')
+    service = SelectField('Filter by Service', choices = [('1', 'Conventional Oil Change'), ('2', 'Synthetic Blend Oil Change'), 
+        ('3', 'Full Synthetic Oil Change'), ('4', 'High-Mileage Oil Change')])
+    
+
+    submit = SubmitField('Submit')
