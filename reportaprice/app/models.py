@@ -69,6 +69,7 @@ class Post(db.Model):
     service_id = db.Column(db.Integer, db.ForeignKey('service.id'))
     company_id = db.Column(db.Integer, db.ForeignKey('company.id'))
 
+
     def __repr__(self):
         return '<Post {}>'.format(self.body)
 
@@ -103,10 +104,7 @@ class Service(db.Model):
         icon_path = '../static/' + self.title + '.png'
         return icon_path
 
-    def avatar(self, size):
-        digest = md5(self.email.lower().encode('utf-8')).hexdigest()
-        return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(
-            digest, size)
+    
 
     def __repr__(self):
         return '<Service {}>'.format(self.title)

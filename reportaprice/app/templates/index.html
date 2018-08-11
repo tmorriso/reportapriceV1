@@ -7,7 +7,6 @@
 		<h1>Search Prices</h1>
 	{% else %}
 		<h1>Live Feed</h1>
-
 	{% endif %}
 
     <form autocomplete="off" action="" method="post" class="form-inline">
@@ -18,7 +17,7 @@
         </div>
         <div class="form-group">
            <!--  {{ form.zip_code.label }} -->
-            {{ form.zip_code(cols=32, rows=4, class="form-control", placeholder="Filter by zipcode") }}<br>
+            {{ form.zip_code(cols=32, rows=4, class="form-control", placeholder="Zip Code") }}<br>
         </div>
         {{ form.submit(class="btn btn-default") }}
     </form>
@@ -41,5 +40,8 @@
             </li>
         </ul>
     </nav>
+
+ <!-- Display the average price overall for the zipcode, company with the lowest average price (eventually a list), maybe more     -->
+
 
 {% endblock %}
