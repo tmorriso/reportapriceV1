@@ -99,6 +99,13 @@ class Service(db.Model):
         return service.companies.filter(
             companies_services.c.company_id == company.id).count() > 0
 
+    def icon(self):
+        return '../static/oil_change.png'
+
+    def avatar(self, size):
+        digest = md5(self.email.lower().encode('utf-8')).hexdigest()
+        return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(
+            digest, size)
 
     def __repr__(self):
         return '<Service {}>'.format(self.title)

@@ -1,11 +1,16 @@
 <table class="table table-hover">
 	<tr>
 		<td width="70px">
-			
+		
 		{% if post.author %}
-	    <td><img src="{{ post.author.avatar(36) }}"></td>
+	    <td><img src="{{ post.author.avatar(36) }}"></td>	  
 	    {% endif %}
-	    <td>
+	    <!-- {{ post.service.icon }} This should return {{url_for('static', filename='oil_change.png')}}-->
+	    {% if not post.author %}
+
+	    <td><img src="{{ post.service.icon() }}" style="width:36px;height:36px;"></td>
+	    {% endif %}
+	    <td width="1000px">
 	    	
 	        Price: ${{ post.price }}<br>
 	        Service: {{ post.service.title }}<br>
@@ -14,10 +19,10 @@
 	        Reported by:
 	        {% if post.author %}
 	        <a href="{{ url_for('user', username=post.author.username) }}">
-	            {{ post.author.username }}</a> on {{post.timestamp}}<br><br>
+	            {{ post.author.username }}</a> on {{post.timestamp}}
 	        {% else %}
 
-	    	Anonymous on {{post.timestamp}}<br><br>
+	    	Anonymous on {{post.timestamp}}
 	        {% endif %}
 	        
 	    </td>
