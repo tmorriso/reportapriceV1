@@ -100,7 +100,8 @@ class Service(db.Model):
             companies_services.c.company_id == company.id).count() > 0
 
     def icon(self):
-        return '../static/oil_change.png'
+        icon_path = '../static/' + self.title + '.png'
+        return icon_path
 
     def avatar(self, size):
         digest = md5(self.email.lower().encode('utf-8')).hexdigest()

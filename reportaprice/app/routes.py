@@ -59,7 +59,7 @@ def report():
                 price=form.price.data, rating=form.rating.data)
         db.session.add(post)
         db.session.commit()
-        flash('Your post is now live!')
+        flash('Your report is now live!')
         return redirect(url_for('index'))
     return render_template('report.html', title='Report', form=form)
 
