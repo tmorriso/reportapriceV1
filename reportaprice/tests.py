@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 import unittest
 from app import app, db
-from app.models import User, Post, Company, Service
+from app.models import User, Post, Company, Service, Listing
 
 class UserModelCase(unittest.TestCase):
     def setUp(self):
@@ -196,8 +196,8 @@ class UserModelCase(unittest.TestCase):
 
         # check that the correct posts are returned
         self.assertEqual(check1.count(), 2)
-
-    def test_average(self):
+        
+    def test_listings_average(self):
         # create company
         c1 = Company(id=1, company_name='Paint pods', company_address='Boise', company_zipcode='83706',
          company_website='Paintteam.com', company_phone_number='20867832', company_email='PaintTeam@example.com')
@@ -206,13 +206,6 @@ class UserModelCase(unittest.TestCase):
         db.session.add(c1)
         db.session.add(c2)
         db.session.commit()
-
-         # create four users
-        u1 = User(username='john', email='john@example.com')
-        u2 = User(username='susan', email='susan@example.com')
-        u3 = User(username='mary', email='mary@example.com')
-        u4 = User(username='david', email='david@example.com')
-        db.session.add_all([u1, u2, u3, u4])
 
         # create services
         s1 = Service(parent_id=1, title='plumbing')
@@ -224,9 +217,9 @@ class UserModelCase(unittest.TestCase):
         # create four posts
         now = datetime.utcnow()
         p1 = Post(body="post from john",
-                  timestamp=now + timedelta(seconds=1), service_id=1, company_id=1, price=35.0)
+                  timestamp=now + timedelta(seconds=1), service_id=1, company_id=1, price=35.0, rating=1)
         p2 = Post(body="post from john",
-                  timestamp=now + timedelta(seconds=1), service_id=1, company_id=1, price=36.0)
+                  timestamp=now + timedelta(seconds=1), service_id=1, company_id=1, price=36.0, rating=3)
         p3 = Post(body="test post",
                   timestamp=now + timedelta(seconds=1), service_id=2, company_id=2, price=37.0)
         p4 = Post(body="test post",
@@ -234,18 +227,24 @@ class UserModelCase(unittest.TestCase):
         db.session.add_all([p1, p2, p3, p4])
         db.session.commit()
 
-        # check service_posts function
-        posts = u1.filter_posts(1, "Boise", "None", "None")
+        # create listings
+        l1 = Listing(service_id=1, company_id=1)
+        l2 = Listing(service_id=1, company_id=2)
+        db.session.add_all([l1, l2])
+        db.session.commit()
+
+        # get posts
+        posts = Post.query.filter(Post.service_id == 1, Post.company_id == 1)
+
+        # check calculate_averages function
+        l1.calculate_averages(posts)
 
         # check that the correct posts are returned
         self.assertEqual(posts.count(), 2)
-        
-        # check average
-        average = u1.find_average(posts)
 
-        # check that the correct posts are returned
-        self.assertEqual(average, 35.5)
-        
+        # check that the average price is correct 
+        self.assertEqual(l1.average_price, 35.5)
+        self.assertEqual(l1.average_rating, 2)
 
 
 

@@ -70,16 +70,6 @@ class User(UserMixin, db.Model):
         
         return Post.query.join(Company).filter(Company.company_zipcode.in_(city_zips), Post.service_id == service)
 
-    def find_average(self, posts):
-        if posts.count() != 0:
-            total = 0
-            for post in posts:
-                total += post.price
-            average = round(total/posts.count(),2)
-        else:
-            average = "NA"    
-        return average
-
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -90,10 +80,34 @@ class Post(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     service_id = db.Column(db.Integer, db.ForeignKey('service.id'))
     company_id = db.Column(db.Integer, db.ForeignKey('company.id'))
+    listing_id = db.Column(db.Integer, db.ForeignKey('listing.id')) 
 
 
     def __repr__(self):
         return '<Post {}>'.format(self.body)
+
+class Listing(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    service_id = db.Column(db.Integer, db.ForeignKey('service.id'))
+    company_id = db.Column(db.Integer, db.ForeignKey('company.id'))
+    average_price = db.Column(db.Float)
+    average_rating = db.Column(db.Float)
+    posts = db.relationship('Post', backref='listing', lazy='dynamic')
+
+    def __repr__(self):
+        return '<Listing {}>'.format(self.service_id)
+
+    def calculate_averages(self, posts):
+        total_rating = 0
+        total_price = 0
+        count = 0 
+        for post in posts:
+            if post.service == self.service and post.company == self.company:
+                total_price += post.price
+                total_rating += post.rating
+                count += 1
+        self.average_price = total_price/count
+        self.average_rating = total_rating/count
 
 companies_services = db.Table('companies_services',
     db.Column('service_id', db.Integer, db.ForeignKey('service.id')),
@@ -105,6 +119,7 @@ class Service(db.Model):
     parent_id = db.Column(db.Integer)
     title = db.Column(db.String(120))
     posts = db.relationship('Post', backref='service', lazy='dynamic')
+    listings = db.relationship('Listing', backref='service', lazy='dynamic')
     companies = db.relationship(
         'Company', secondary=companies_services,
         backref=db.backref('services', lazy='dynamic'), lazy='dynamic')
@@ -151,10 +166,20 @@ class Company(db.Model):
     company_phone_number = db.Column(db.String(120))
     company_email = db.Column(db.String(120))
     posts = db.relationship('Post', backref='company', lazy='dynamic')
+    listings = db.relationship('Listing', backref='company', lazy='dynamic')
 
     def __repr__(self):
         return '<Company {}>'.format(self.company_name)
 
+def find_average(posts):
+        if posts.count() != 0:
+            total = 0
+            for post in posts:
+                total += post.price
+            average = round(total/posts.count(),2)
+        else:
+            average = "NA"    
+        return average
 
 @login.user_loader
 def load_user(id):

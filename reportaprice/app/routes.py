@@ -8,6 +8,7 @@ from flask_login import logout_user, login_required
 from datetime import datetime
 
 
+
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
@@ -31,7 +32,7 @@ def find(service):
         average_price = "NA"
     else:
         posts_list = Post.query.filter_by(service_id=service)
-        average_price = current_user.find_average(posts_list)
+        average_price = find_average(posts_list)
         posts = posts = Post.query.filter_by(service_id=service).order_by(Post.timestamp.desc()).paginate(
                 page, app.config['POSTS_PER_PAGE'], False)
 
@@ -58,8 +59,7 @@ def report():
                 price=form.price.data, rating=form.rating.data)
         db.session.add(post)
         db.session.commit()
-        post.service.add_company(post.company)
-        db.session.commit()
+
         flash('Your report is now live!')
         return redirect(url_for('index'))
     return render_template('report.html', title='Report', form=form)
@@ -165,4 +165,14 @@ def unfollow(username):
     db.session.commit()
     flash('You are not following {}.'.format(username))
     return redirect(url_for('user', username=username))
+
+def find_average(posts):
+        if posts.count() != 0:
+            total = 0
+            for post in posts:
+                total += post.price
+            average = round(total/posts.count(),2)
+        else:
+            average = "NA"    
+        return average
 
