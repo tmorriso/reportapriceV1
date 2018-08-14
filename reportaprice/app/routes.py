@@ -12,21 +12,7 @@ from datetime import datetime
 @app.route('/index', methods=['GET', 'POST'])
 def index():
     return redirect(url_for('find', service='index'))
-    # page = request.args.get('page', 1, type=int)
-    # form = ExploreForm()
-    # if form.validate_on_submit():
-    #     service = form.service.data
-    #     return redirect(url_for('find', service=service))
-
-    # posts = Post.query.order_by(Post.timestamp.desc()).paginate(
-    #             page, app.config['POSTS_PER_PAGE'], False)
-    # next_url = url_for('index', page=posts.next_num) \
-    #     if posts.has_next else None
-    # prev_url = url_for('index', page=posts.prev_num) \
-    #     if posts.has_prev else None
-
-    # return render_template("index.html", title='Live Feed', posts=posts.items,
-    #                       next_url=next_url, prev_url=prev_url, form=form)
+    
 
 @app.route('/find/<service>', methods=['GET', 'POST'])
 def find(service):
@@ -38,16 +24,24 @@ def find(service):
     if service == 'index':
         posts = Post.query.order_by(Post.timestamp.desc()).paginate(
                 page, app.config['POSTS_PER_PAGE'], False)
-    else:
+        average_price = "NA"
+    elif service == 'search':
         posts = Post.query.filter_by(service_id=service).order_by(Post.timestamp.desc()).paginate(
                 page, app.config['POSTS_PER_PAGE'], False)
+        average_price = "NA"
+    else:
+        posts_list = Post.query.filter_by(service_id=service)
+        average_price = current_user.find_average(posts_list)
+        posts = posts = Post.query.filter_by(service_id=service).order_by(Post.timestamp.desc()).paginate(
+                page, app.config['POSTS_PER_PAGE'], False)
+
     next_url = url_for('find', service=service, page=posts.next_num) \
         if posts.has_next else None
     prev_url = url_for('find', service=service, page=posts.prev_num) \
         if posts.has_prev else None
 
     return render_template("index.html", title='Explore', posts=posts.items,
-                          next_url=next_url, prev_url=prev_url, form=form)
+                          next_url=next_url, prev_url=prev_url, average_price=average_price, form=form)
 
 @app.route('/report', methods=['GET', 'POST'])
 #@login_required

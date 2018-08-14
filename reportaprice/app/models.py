@@ -4,6 +4,8 @@ from app import db
 from flask_login import UserMixin
 from app import login
 from hashlib import md5
+from uszipcode import ZipcodeSearchEngine
+from sqlalchemy import and_
 
 followers = db.Table('followers',
     db.Column('follower_id', db.Integer, db.ForeignKey('user.id')),
@@ -58,6 +60,26 @@ class User(UserMixin, db.Model):
         own = Post.query.filter_by(user_id=self.id)
         return followed.union(own).order_by(Post.timestamp.desc())
 
+    def filter_posts(self, service, location, company, rating):
+        search = ZipcodeSearchEngine()
+        if service != "None" and location != "None" and company == 'None' and rating == 'None':
+            res = search.by_city(location)
+            city_zips = []
+            for i in range (0,len(res)):
+                city_zips.append(res[i].Zipcode)
+        
+        return Post.query.join(Company).filter(Company.company_zipcode.in_(city_zips), Post.service_id == service)
+
+    def find_average(self, posts):
+        if posts.count() != 0:
+            total = 0
+            for post in posts:
+                total += post.price
+            average = round(total/posts.count(),2)
+        else:
+            average = "NA"    
+        return average
+
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -100,11 +122,12 @@ class Service(db.Model):
         return service.companies.filter(
             companies_services.c.company_id == company.id).count() > 0
 
-    def icon(self):
-        icon_path = '../static/' + self.title + '.png'
+    def icon(service):
+        icon_path = '../static/' + service.title + '.png'
         return icon_path
 
-    
+    def service_posts(service):
+        return Post.query.filter_by(service_id=service.id)
 
     def __repr__(self):
         return '<Service {}>'.format(self.title)
@@ -123,6 +146,7 @@ class Company(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     company_name = db.Column(db.String(120))
     company_address = db.Column(db.String(120))
+    company_zipcode = db.Column(db.String(120))
     company_website = db.Column(db.String(120))
     company_phone_number = db.Column(db.String(120))
     company_email = db.Column(db.String(120))

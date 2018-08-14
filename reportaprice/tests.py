@@ -86,9 +86,6 @@ class UserModelCase(unittest.TestCase):
         self.assertEqual(f3, [p3, p4])
         self.assertEqual(f4, [p4])
 
-    # def test_links_with_post(self):
-    #     p = Post(price='150.50', rating='5', body='Best Ever', author=1, service=1, company=1)
-
     def test_service_add_company(self):
         # create service
         s1 = Service(parent_id=1, title='plumbing')
@@ -129,8 +126,127 @@ class UserModelCase(unittest.TestCase):
         self.assertEqual(c2.services.count(), 1)
         self.assertEqual(c2.services.first().title, 'plumbing')
 
+    def test_service_posts(self):
+        # create services
+        s1 = Service(parent_id=1, title='plumbing')
+        s2 = Service(parent_id=2, title='electrical')
+        db.session.add(s1)
+        db.session.add(s2)
+        db.session.commit()
 
-   
+        # create four posts
+        now = datetime.utcnow()
+        p1 = Post(body="post from john",
+                  timestamp=now + timedelta(seconds=1), service_id=1)
+        p2 = Post(body="post from john",
+                  timestamp=now + timedelta(seconds=1), service_id=1)
+        p3 = Post(body="post from john",
+                  timestamp=now + timedelta(seconds=1), service_id=2)
+        db.session.add_all([p1, p2, p3])
+        db.session.commit()
+
+        # check service_posts function
+        check1 = s1.service_posts()
+        check2 = s2.service_posts()
+
+        # check that the correct posts are returned
+        self.assertEqual(check1.count(), 2)
+        self.assertEqual(check2.count(), 1)
+
+    def test_post_filter(self):
+        # create company
+        c1 = Company(id=1, company_name='Paint pods', company_address='Boise', company_zipcode='83706',
+         company_website='Paintteam.com', company_phone_number='20867832', company_email='PaintTeam@example.com')
+        c2 = Company(id=2, company_name='Bob Team', company_address='Salt Lake City', company_zipcode='81504',
+         company_website='Paintteam.com', company_phone_number='2086783456', company_email='PaintTeam@example.com')
+        db.session.add(c1)
+        db.session.add(c2)
+        db.session.commit()
+
+         # create four users
+        u1 = User(username='john', email='john@example.com')
+        u2 = User(username='susan', email='susan@example.com')
+        u3 = User(username='mary', email='mary@example.com')
+        u4 = User(username='david', email='david@example.com')
+        db.session.add_all([u1, u2, u3, u4])
+
+        # create services
+        s1 = Service(parent_id=1, title='plumbing')
+        s2 = Service(parent_id=2, title='electrical')
+        db.session.add(s1)
+        db.session.add(s2)
+        db.session.commit()
+
+        # create four posts
+        now = datetime.utcnow()
+        p1 = Post(body="post from john",
+                  timestamp=now + timedelta(seconds=1), service_id=1, company_id=1)
+        p2 = Post(body="post from john",
+                  timestamp=now + timedelta(seconds=1), service_id=1, company_id=1)
+        p3 = Post(body="Test post",
+                  timestamp=now + timedelta(seconds=1), service_id=2, company_id=2)
+        p4 = Post(body="test post",
+                  timestamp=now + timedelta(seconds=1), service_id=2, company_id=2)
+        db.session.add_all([p1, p2, p3, p4])
+        db.session.commit()
+
+        # check service_posts function
+        check1 = u1.filter_posts(1, "Boise", "None", "None")
+        
+
+        # check that the correct posts are returned
+        self.assertEqual(check1.count(), 2)
+
+    def test_average(self):
+        # create company
+        c1 = Company(id=1, company_name='Paint pods', company_address='Boise', company_zipcode='83706',
+         company_website='Paintteam.com', company_phone_number='20867832', company_email='PaintTeam@example.com')
+        c2 = Company(id=2, company_name='Bob Team', company_address='Salt Lake City', company_zipcode='81504',
+         company_website='Paintteam.com', company_phone_number='2086783456', company_email='PaintTeam@example.com')
+        db.session.add(c1)
+        db.session.add(c2)
+        db.session.commit()
+
+         # create four users
+        u1 = User(username='john', email='john@example.com')
+        u2 = User(username='susan', email='susan@example.com')
+        u3 = User(username='mary', email='mary@example.com')
+        u4 = User(username='david', email='david@example.com')
+        db.session.add_all([u1, u2, u3, u4])
+
+        # create services
+        s1 = Service(parent_id=1, title='plumbing')
+        s2 = Service(parent_id=2, title='electrical')
+        db.session.add(s1)
+        db.session.add(s2)
+        db.session.commit()
+
+        # create four posts
+        now = datetime.utcnow()
+        p1 = Post(body="post from john",
+                  timestamp=now + timedelta(seconds=1), service_id=1, company_id=1, price=35.0)
+        p2 = Post(body="post from john",
+                  timestamp=now + timedelta(seconds=1), service_id=1, company_id=1, price=36.0)
+        p3 = Post(body="test post",
+                  timestamp=now + timedelta(seconds=1), service_id=2, company_id=2, price=37.0)
+        p4 = Post(body="test post",
+                  timestamp=now + timedelta(seconds=1), service_id=2, company_id=2, price=38.0)
+        db.session.add_all([p1, p2, p3, p4])
+        db.session.commit()
+
+        # check service_posts function
+        posts = u1.filter_posts(1, "Boise", "None", "None")
+
+        # check that the correct posts are returned
+        self.assertEqual(posts.count(), 2)
+        
+        # check average
+        average = u1.find_average(posts)
+
+        # check that the correct posts are returned
+        self.assertEqual(average, 35.5)
+        
+
 
 
 
