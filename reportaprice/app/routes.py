@@ -12,9 +12,12 @@ from datetime import datetime
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
-    return redirect(url_for('find', service='index'))
-    
+    form = ExploreForm()
+    if form.validate_on_submit():
+        print("hi")
 
+    return render_template("index_temp.html", title='Home', form=form)
+    
 @app.route('/find/<service>', methods=['GET', 'POST'])
 def find(service):
     page = request.args.get('page', 1, type=int)
@@ -22,12 +25,8 @@ def find(service):
     if form.validate_on_submit():
         service = form.service.data
         return redirect(url_for('find', service=service))
-    if service == 'index':
+    if service == 'search':
         posts = Post.query.order_by(Post.timestamp.desc()).paginate(
-                page, app.config['POSTS_PER_PAGE'], False)
-        average_price = "NA"
-    elif service == 'search':
-        posts = Post.query.filter_by(service_id=service).order_by(Post.timestamp.desc()).paginate(
                 page, app.config['POSTS_PER_PAGE'], False)
         average_price = "NA"
     else:
