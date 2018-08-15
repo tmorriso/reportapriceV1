@@ -17,6 +17,25 @@ def index():
         print("hi")
 
     return render_template("index_temp.html", title='Home', form=form)
+
+@app.route('/search', methods=['GET', 'POST'])
+def search():
+    page = request.args.get('page', 1, type=int)
+    form = ExploreForm()
+    if form.validate_on_submit():
+        service = form.service.data
+        return redirect(url_for('find', service=service))
+
+    posts = Post.query.order_by(Post.timestamp.desc()).paginate(
+                page, app.config['POSTS_PER_PAGE'], False)
+        
+    next_url = url_for('find', service=service, page=posts.next_num) \
+        if posts.has_next else None
+    prev_url = url_for('find', service=service, page=posts.prev_num) \
+        if posts.has_prev else None
+
+    return render_template("index.html", title='Explore', posts=posts.items,
+                          next_url=next_url, prev_url=prev_url, form=form)
     
 @app.route('/find/<service>', methods=['GET', 'POST'])
 def find(service):
@@ -25,23 +44,20 @@ def find(service):
     if form.validate_on_submit():
         service = form.service.data
         return redirect(url_for('find', service=service))
-    if service == 'search':
-        posts = Post.query.order_by(Post.timestamp.desc()).paginate(
-                page, app.config['POSTS_PER_PAGE'], False)
-        average_price = "NA"
     else:
-        posts_list = Post.query.filter_by(service_id=service)
-        average_price = find_average(posts_list)
-        posts = posts = Post.query.filter_by(service_id=service).order_by(Post.timestamp.desc()).paginate(
-                page, app.config['POSTS_PER_PAGE'], False)
+        listings = Listing.query.filter(Listing.service_id==service)
+        for listing in listings:
+            posts = Post.query.filter(Post.service_id==listing.service_id, Post.company_id==listing.company_id)
+            listing.calculate_averages(posts)
+        listings = listings.order_by(Listing.average_price).paginate(page, app.config['POSTS_PER_PAGE'], False)
 
-    next_url = url_for('find', service=service, page=posts.next_num) \
-        if posts.has_next else None
-    prev_url = url_for('find', service=service, page=posts.prev_num) \
-        if posts.has_prev else None
+    next_url = url_for('find', service=service, page=listings.next_num) \
+        if listings.has_next else None
+    prev_url = url_for('find', service=service, page=listings.prev_num) \
+        if listings.has_prev else None
 
-    return render_template("index.html", title='Explore', posts=posts.items,
-                          next_url=next_url, prev_url=prev_url, average_price=average_price, form=form)
+    return render_template("find.html", title='Explore', listings=listings.items, average_price="place holder",
+                          next_url=next_url, prev_url=prev_url, form=form)
 
 @app.route('/report', methods=['GET', 'POST'])
 #@login_required
