@@ -3,7 +3,7 @@ from werkzeug.urls import url_parse
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, ExploreForm
 from flask_login import current_user, login_user
-from app.models import User, Post
+from app.models import User, Post, Listing
 from flask_login import logout_user, login_required
 from datetime import datetime
 
@@ -49,14 +49,23 @@ def find(service):
 def report():
     form = PostForm()
     if form.validate_on_submit():
+        listing = Listing.query.filter(Listing.company_id == 1, Listing.service_id == 1).all()
+        if len(listing) == 0:
+            # If Listing doesn't exist create it
+            listing = Listing(service_id=form.service.data, company_id=form.company.data)
+            print (listing)
+            db.session.add(listing)
+            db.session.commit()
+        else:
+            listing = listing[0]
         if current_user.is_authenticated:
             post = Post(body=form.post.data, author=current_user, 
                 service_id=form.service.data, company_id=form.company.data, 
-                price=form.price.data, rating=form.rating.data)
+                price=form.price.data, rating=form.rating.data, listing=listing)
         else:
             post = Post(body=form.post.data,
                 service_id=form.service.data, company_id=form.company.data, 
-                price=form.price.data, rating=form.rating.data)
+                price=form.price.data, rating=form.rating.data, listing=listing)
         db.session.add(post)
         db.session.commit()
 
@@ -166,6 +175,8 @@ def unfollow(username):
     flash('You are not following {}.'.format(username))
     return redirect(url_for('user', username=username))
 
+
+# Auxillary Functions
 def find_average(posts):
         if posts.count() != 0:
             total = 0
