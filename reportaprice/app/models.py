@@ -106,8 +106,8 @@ class Listing(db.Model):
                 total_price += post.price
                 total_rating += post.rating
                 count += 1
-        self.average_price = total_price/count
-        self.average_rating = total_rating/count
+        self.average_price = round(total_price/count, 2)
+        self.average_rating = round(total_rating/count, 1)
 
 companies_services = db.Table('companies_services',
     db.Column('service_id', db.Integer, db.ForeignKey('service.id')),

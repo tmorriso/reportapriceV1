@@ -3,7 +3,7 @@ from werkzeug.urls import url_parse
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, ExploreForm
 from flask_login import current_user, login_user
-from app.models import User, Post, Listing
+from app.models import User, Post, Listing, Service
 from flask_login import logout_user, login_required
 from datetime import datetime
 
@@ -24,14 +24,13 @@ def search():
     form = ExploreForm()
     if form.validate_on_submit():
         service = form.service.data
-        return redirect(url_for('find', service=service))
-
+        return redirect(url_for('find', service=service.id))
     posts = Post.query.order_by(Post.timestamp.desc()).paginate(
                 page, app.config['POSTS_PER_PAGE'], False)
         
-    next_url = url_for('find', service=service, page=posts.next_num) \
+    next_url = url_for('find', service=service.id, page=posts.next_num) \
         if posts.has_next else None
-    prev_url = url_for('find', service=service, page=posts.prev_num) \
+    prev_url = url_for('find', service=service.id, page=posts.prev_num) \
         if posts.has_prev else None
 
     return render_template("index.html", title='Explore', posts=posts.items,
@@ -42,8 +41,8 @@ def find(service):
     page = request.args.get('page', 1, type=int)
     form = ExploreForm()
     if form.validate_on_submit():
-        service = form.service.data
-        return redirect(url_for('find', service=service))
+        form_service = form.service.data
+        return redirect(url_for('find', service=form_service.id))
     else:
         listings = Listing.query.filter(Listing.service_id==service)
         for listing in listings:
@@ -64,10 +63,12 @@ def find(service):
 def report():
     form = PostForm()
     if form.validate_on_submit():
-        listing = Listing.query.filter(Listing.company_id == 1, Listing.service_id == 1).all()
+        service = form.service.data
+        company = form.company.data
+        listing = Listing.query.filter(Listing.company_id == company.id, Listing.service_id == service.id).all()
         if len(listing) == 0:
             # If Listing doesn't exist create it
-            listing = Listing(service_id=form.service.data, company_id=form.company.data)
+            listing = Listing(service_id=service.id, company_id=company.id)
             print (listing)
             db.session.add(listing)
             db.session.commit()
@@ -75,11 +76,11 @@ def report():
             listing = listing[0]
         if current_user.is_authenticated:
             post = Post(body=form.post.data, author=current_user, 
-                service_id=form.service.data, company_id=form.company.data, 
+                service_id=service.id, company_id=company.id, 
                 price=form.price.data, rating=form.rating.data, listing=listing)
         else:
             post = Post(body=form.post.data,
-                service_id=form.service.data, company_id=form.company.data, 
+                service_id=service.id, company_id=company.id, 
                 price=form.price.data, rating=form.rating.data, listing=listing)
         db.session.add(post)
         db.session.commit()

@@ -1,7 +1,15 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, SubmitField, SelectField, DecimalField,IntegerField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
-from app.models import User
+from wtforms_alchemy.fields import QuerySelectField
+from app.models import User, Service, Company
+
+# Auxillary functions
+def service_query():
+    return Service.query
+
+def company_query():
+    return Company.query
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -43,9 +51,8 @@ class EditProfileForm(FlaskForm):
                 raise ValidationError('Please use a different username.')
 
 class PostForm(FlaskForm):
-    service = SelectField('Select a Service', choices = [('1', 'Conventional Oil Change'), ('2', 'Synthetic Blend Oil Change'), 
-        ('3', 'Full Synthetic Oil Change'), ('4', 'High-Mileage Oil Change')])
-    company = SelectField('Select a Company', choices = [('1', 'Jiffy Lube'), ('2', 'Einsteins Oilery'), ('3','Rogers Northside Garage')])
+    service = QuerySelectField(query_factory=service_query, allow_blank=True, blank_text='Select a Service', get_label='title')
+    company = QuerySelectField(query_factory=company_query, allow_blank=True, blank_text='Select a Company', get_label='company_name')
     price = DecimalField('What price did you pay?')
     rating = SelectField('Leave a rating ', choices = [('1', '1 Star'), ('2', '2 Stars'), ('3', '3 Stars'), ('4', ' 4 Stars'), ('5', '5 Stars')])
     post = TextAreaField('Leave a Review', validators=[
@@ -55,9 +62,11 @@ class PostForm(FlaskForm):
     submit = SubmitField('Submit')
 
 class ExploreForm(FlaskForm):
+    service = QuerySelectField(query_factory=service_query, allow_blank=True, blank_text='Select a Service', get_label='title')
     zip_code = IntegerField('Filter by zipcode')
-    service = SelectField('Filter by Service', choices = [('1', 'Conventional Oil Change'), ('2', 'Synthetic Blend Oil Change'), 
-        ('3', 'Full Synthetic Oil Change'), ('4', 'High-Mileage Oil Change')])
+    # service = SelectField('Filter by Service', choices = [('',('1', 'Conventional Oil Change'), ('2', 'Synthetic Blend Oil Change'), 
+    #     ('3', 'Full Synthetic Oil Change'), ('4', 'High-Mileage Oil Change')])
     
 
     submit = SubmitField('Submit')
+
