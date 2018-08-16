@@ -1,15 +1,20 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, SubmitField, SelectField, DecimalField,IntegerField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, SubmitField, SelectField, DecimalField, IntegerField, TextField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
 from wtforms_alchemy.fields import QuerySelectField
 from app.models import User, Service, Company
-
+from app import db
 # Auxillary functions
 def service_query():
     return Service.query
 
 def company_query():
     return Company.query
+
+# This doesn't work, asked question on stack overflow
+# def city_query():
+#     return db.session.query(Company.company_city).distinct()
+
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -58,15 +63,12 @@ class PostForm(FlaskForm):
     post = TextAreaField('Leave a Review', validators=[
         DataRequired(), Length(min=1, max=140)])
     
-
     submit = SubmitField('Submit')
 
 class ExploreForm(FlaskForm):
-    service = QuerySelectField(query_factory=service_query, allow_blank=True, blank_text='Select a Service', get_label='title')
-    zip_code = IntegerField('Filter by zipcode')
-    # service = SelectField('Filter by Service', choices = [('',('1', 'Conventional Oil Change'), ('2', 'Synthetic Blend Oil Change'), 
-    #     ('3', 'Full Synthetic Oil Change'), ('4', 'High-Mileage Oil Change')])
+    service = QuerySelectField(query_factory=service_query, allow_blank=True, blank_text='Select a Service', get_label='title', validators=[
+        DataRequired()])
+    city = SelectField(choices = [('','Select a city'), ('Boise','Boise, Idaho')], validators=[DataRequired()])
     
-
     submit = SubmitField('Submit')
 

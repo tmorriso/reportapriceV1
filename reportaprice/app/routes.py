@@ -7,14 +7,13 @@ from app.models import User, Post, Listing, Service
 from flask_login import logout_user, login_required
 from datetime import datetime
 
-
-
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
     form = ExploreForm()
     if form.validate_on_submit():
-        print("hi")
+        form_service = form.service.data
+        return redirect(url_for('find', service=form_service.id))
 
     return render_template("index_temp.html", title='Home', form=form)
 
@@ -49,13 +48,15 @@ def find(service):
             posts = Post.query.filter(Post.service_id==listing.service_id, Post.company_id==listing.company_id)
             listing.calculate_averages(posts)
         listings = listings.order_by(Listing.average_price).paginate(page, app.config['POSTS_PER_PAGE'], False)
+        all_posts = Post.query.filter(Post.service_id == listing.service_id)
+        average_price = find_average(all_posts)
 
     next_url = url_for('find', service=service, page=listings.next_num) \
         if listings.has_next else None
     prev_url = url_for('find', service=service, page=listings.prev_num) \
         if listings.has_prev else None
 
-    return render_template("find.html", title='Explore', listings=listings.items, average_price="place holder",
+    return render_template("find.html", title='Explore', listings=listings.items, average_price=average_price,
                           next_url=next_url, prev_url=prev_url, form=form)
 
 @app.route('/report', methods=['GET', 'POST'])
@@ -69,7 +70,6 @@ def report():
         if len(listing) == 0:
             # If Listing doesn't exist create it
             listing = Listing(service_id=service.id, company_id=company.id)
-            print (listing)
             db.session.add(listing)
             db.session.commit()
         else:
@@ -86,7 +86,7 @@ def report():
         db.session.commit()
 
         flash('Your report is now live!')
-        return redirect(url_for('index'))
+        return redirect(url_for('search'))
     return render_template('report.html', title='Report', form=form)
 
 @app.route('/login', methods=['GET', 'POST'])

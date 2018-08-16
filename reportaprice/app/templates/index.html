@@ -8,16 +8,14 @@
     <form autocomplete="off" action="" method="post" class="form-inline">
         {{ form.hidden_tag() }}
         <div class="form-group">
-            <!-- {{ form.service.label }} -->
             {{ form.service(cols=32, rows=4, class="form-control" ) }}<br>
         </div>
         <div class="form-group">
-           <!--  {{ form.zip_code.label }} -->
-            {{ form.zip_code(cols=32, rows=4, class="form-control", placeholder="Zip Code") }}<br>
+            {{ form.city(cols=32, rows=4, class="form-control", placeholder="Enter City") }}<br>
         </div>
         {{ form.submit(class="btn btn-default") }}
     </form>
-    <br>
+
     <br>
     <P>Live feed of user submitted prices...</p>
     {% for post in posts %}
