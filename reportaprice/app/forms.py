@@ -11,9 +11,9 @@ def service_query():
 def company_query():
     return Company.query
 
-# This doesn't work, asked question on stack overflow
-# def city_query():
-#     return db.session.query(Company.company_city).distinct()
+#This doesn't work, asked question on stack overflow
+def city_query():
+    return Company.query.group_by(Company.company_city)
 
 
 class LoginForm(FlaskForm):
@@ -56,19 +56,24 @@ class EditProfileForm(FlaskForm):
                 raise ValidationError('Please use a different username.')
 
 class PostForm(FlaskForm):
-    service = QuerySelectField(query_factory=service_query, allow_blank=True, blank_text='Select a Service', get_label='title')
+    service = QuerySelectField(query_factory=service_query, allow_blank=True, blank_text='Select a Service', get_label='title', validators=[
+        DataRequired()])
     company = QuerySelectField(query_factory=company_query, allow_blank=True, blank_text='Select a Company', get_label='company_name')
-    price = DecimalField('What price did you pay?')
-    rating = SelectField('Leave a rating ', choices = [('1', '1 Star'), ('2', '2 Stars'), ('3', '3 Stars'), ('4', ' 4 Stars'), ('5', '5 Stars')])
+    price = DecimalField('What price did you pay?', validators=[
+        DataRequired()])
+    rating = SelectField('Leave a rating ', choices = [('1', '1 Star'), ('2', '2 Stars'), ('3', '3 Stars'), ('4', ' 4 Stars'), ('5', '5 Stars')], validators=[
+        DataRequired()])
     post = TextAreaField('Leave a Review', validators=[
         DataRequired(), Length(min=1, max=140)])
     
     submit = SubmitField('Submit')
 
 class ExploreForm(FlaskForm):
-    service = QuerySelectField(query_factory=service_query, allow_blank=True, blank_text='Select a Service', get_label='title', validators=[
+    service = QuerySelectField(query_factory=service_query, allow_blank=True, blank_text='Enter a Service', get_label='title', validators=[
         DataRequired()])
-    city = SelectField(choices = [('','Select a city'), ('Boise','Boise, Idaho')], validators=[DataRequired()])
+    city = QuerySelectField(query_factory=city_query, allow_blank=True, blank_text='Enter a City', get_label='company_city', validators=[
+        DataRequired()])
+    #city = SelectField(choices = [('','Enter a city'), ('Boise','Boise, ID')], validators=[DataRequired()])
     
     submit = SubmitField('Submit')
 

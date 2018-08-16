@@ -246,6 +246,34 @@ class UserModelCase(unittest.TestCase):
         self.assertEqual(l1.average_price, 35.5)
         self.assertEqual(l1.average_rating, 2)
 
+    def test_example(self):
+        e1 = Company(company_name='foo', company_city='bar')
+        e2 = Company(company_name='hoo', company_city='bar')
+        e3 = Company(company_name='foo', company_city='bar')
+        e4 = Company(company_name='foo', company_city='bar')
+        e5 = Company(company_name='doo', company_city='bar')
+        e6 = Company(company_name='doo', company_city='jar')
+
+        db.session.add_all([e1, e2, e3, e4, e5, e6])
+        db.session.commit()
+
+        test1 = []
+        for value in db.session.query(Company.company_city).distinct():
+            test1.append(value)
+
+
+        test2 = []
+        for value in Company.query.group_by(Company.company_city):
+            test2.append(value.company_city)
+        # result = Company.query.with_entities(Company.company_city).distinct().all()
+        # print (result)
+
+        # test = []
+        # for value in Company.query.distinct(Company.company_city).group_by(Company.company_city):
+        #     test.append(value.company_city)
+
+        print(test2, test1)
+
 
 
 
