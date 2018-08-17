@@ -50,13 +50,14 @@ def find(service):
         listings = listings.order_by(Listing.average_price).paginate(page, app.config['POSTS_PER_PAGE'], False)
         all_posts = Post.query.filter(Post.service_id == listing.service_id)
         average_price = find_average(all_posts)
+        service_name = listing.service.title
 
     next_url = url_for('find', service=service, page=listings.next_num) \
         if listings.has_next else None
     prev_url = url_for('find', service=service, page=listings.prev_num) \
         if listings.has_prev else None
 
-    return render_template("find.html", title='Explore', listings=listings.items, average_price=average_price,
+    return render_template("find.html", title='Explore', listings=listings.items, average_price=average_price, service_name=service_name,
                           next_url=next_url, prev_url=prev_url, form=form)
 
 @app.route('/report', methods=['GET', 'POST'])

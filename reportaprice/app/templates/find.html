@@ -11,19 +11,22 @@
             {{ form.service(cols=32, rows=4, class="form-control" ) }}<br>
         </div>
         <div class="form-group">
-            {{ form.city(cols=32, rows=4, class="form-control", placeholder="Enter a City") }}<br>
+            {{ form.city(cols=32, rows=4, class="form-control") }}<br>
         </div>
-        {{ form.submit(class="btn btn-default") }}
+        <div class="form-group">
+             {{ form.submit(class="btn btn-default") }}
+        </div>
     </form>
     <br>
-    <br>
+    
 
     {% if average_price != "NA" %}
     <div class="container p-3 mb-2 bg-info text-white">
-        <h3> The average reported price for a conventional Oil Change in your area is: ${{average_price}}</h3>
-    </div><br><br>
+        <h3> The average reported price for a {{service_name}} in your area is: ${{average_price}}</h3>
+    </div><br>
     {% endif %}
-    
+
+<p style=" font-size: 18px;"> Displaying results for average reported prices for companies near you from cheapest to most expensive.... </p>
 <table class="table table-hover text-center">
     <tr>
         <td width="120px">
@@ -59,8 +62,6 @@
             </li>
         </ul>
     </nav>
-
- <!-- Display the average price overall for the zipcode, company with the lowest average price (eventually a list), maybe more     -->
 
 
 {% endblock %}
