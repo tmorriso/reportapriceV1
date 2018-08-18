@@ -265,6 +265,12 @@ class UserModelCase(unittest.TestCase):
         test2 = []
         for value in Company.query.group_by(Company.company_city):
             test2.append(value.company_city)
+        # result = Company.query.with_entities(Company.company_city).distinct().all()
+        # print (result)
+
+        # test = []
+        # for value in Company.query.distinct(Company.company_city).group_by(Company.company_city):
+        #     test.append(value.company_city)
 
         print(test2, test1)
 
