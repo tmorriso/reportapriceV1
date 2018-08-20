@@ -5,17 +5,20 @@ Steps to activate the virtual environment (Windows)
 $ venv\Scripts\activate
 (venv) $ _
 
-(venv) $ set FLASK_APP=microblog.py
+Set the FLASK_APP environment variable to reportaprice.com
+(venv) $ set FLASK_APP=reportaprice.py
 
 If you are setting up a new repository there are various dependencies that
-need to be in place and the database must be set up...
+need to be in place:
+
+To install all of the dependencies: 
+(venv) $ python -m pip install -r requirements.txt
+
+To set up the database: 
+(venv) $ flask db upgrade
 
 The migration scripts in the "migrations" directory will set up the database
-automatically to the current state. Once everything is installed you can run:
-
-(venv) $ flask db upgrade 
-
-To run the app use the command:
+to the current state. Once everything is installed you can run the app locally using:
 
 (venv) $ flask run
 
