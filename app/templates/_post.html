@@ -1,0 +1,24 @@
+<table class="table table-hover">
+	<tr>
+		<td width="70px">
+
+	    <td><img src="{{ post.service.icon() }}" style="width:36px;height:36px;"></td>
+
+	    <td width="1000px">
+	    	
+	        Price: ${{ post.price }}<br>
+	        Service: {{ post.service.title }}<br>
+	        Company: {{ post.company.company_name }}<br>
+	        Review: {{ post.body }}<br>
+	        Reported by:
+	        {% if post.author %}
+	        <a href="{{ url_for('user', username=post.author.username) }}">
+	            {{ post.author.username }}</a> on {{post.timestamp}}
+	        {% else %}
+
+	    	Anonymous on {{post.timestamp}}
+	        {% endif %}
+	        
+	    </td>
+	</tr>
+</table>
