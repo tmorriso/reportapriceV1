@@ -71,9 +71,9 @@ class PostForm(FlaskForm):
 class ExploreForm(FlaskForm):
     service = QuerySelectField(query_factory=service_query, allow_blank=True, blank_text='Enter a Service', get_label='title', validators=[
         DataRequired()])
-    city = QuerySelectField(query_factory=city_query, allow_blank=True, blank_text='Enter a City', get_label='company_city', validators=[
-        DataRequired()])
-    #city = SelectField(choices = [('','Enter a city'), ('Boise','Boise, ID')], validators=[DataRequired()])
+    #city = QuerySelectField(query_factory=city_query, allow_blank=True, blank_text='Enter a City', get_label='company_city', validators=[
+    #   DataRequired()])
+    city = SelectField(choices = [('','Enter a city'), ('Boise','Boise, ID')], validators=[DataRequired()])
     
     submit = SubmitField('Submit')
 
