@@ -162,6 +162,7 @@ class Company(db.Model):
     company_name = db.Column(db.String(120))
     company_address = db.Column(db.String(120))
     company_city = db.Column(db.String(120))
+    company_state = db.Column(db.String(120))
     company_zipcode = db.Column(db.String(120))
     company_website = db.Column(db.String(120))
     company_phone_number = db.Column(db.String(120))
