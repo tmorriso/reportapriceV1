@@ -6,6 +6,7 @@ from app import login
 from hashlib import md5
 from uszipcode import ZipcodeSearchEngine
 from sqlalchemy import and_
+from sqlalchemy.orm import column_property
 
 followers = db.Table('followers',
     db.Column('follower_id', db.Integer, db.ForeignKey('user.id')),
@@ -164,6 +165,7 @@ class Company(db.Model):
     company_city = db.Column(db.String(120))
     company_state = db.Column(db.String(120))
     company_zipcode = db.Column(db.String(120))
+    company_display = column_property(company_name + " " + company_address)
     company_website = db.Column(db.String(120))
     company_phone_number = db.Column(db.String(120))
     company_email = db.Column(db.String(120))

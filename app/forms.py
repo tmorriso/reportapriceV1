@@ -58,7 +58,7 @@ class EditProfileForm(FlaskForm):
 class PostForm(FlaskForm):
     service = QuerySelectField(query_factory=service_query, allow_blank=True, blank_text='Select a Service', get_label='title', validators=[
         DataRequired()])
-    company = QuerySelectField(query_factory=company_query, allow_blank=True, blank_text='Select a Company', get_label='company_name')
+    company = QuerySelectField(query_factory=company_query, allow_blank=True, blank_text='Select a Company', get_label='company_display')
     price = DecimalField('What price did you pay?', validators=[
         DataRequired()])
     rating = SelectField('Leave a rating ', choices = [('1', '1 Star'), ('2', '2 Stars'), ('3', '3 Stars'), ('4', ' 4 Stars'), ('5', '5 Stars')], validators=[
