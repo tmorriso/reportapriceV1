@@ -1,0 +1,3 @@
+INSERT INTO SERVICE(id, title) VALUES (3, 'Synthetic Blend Oil Change');
+INSERT INTO SERVICE(id, title) VALUES (4, 'Full Synthetic Oil Change');
+INSERT INTO SERVICE(id, title) VALUES (5, 'High-Mileage Oil Change');

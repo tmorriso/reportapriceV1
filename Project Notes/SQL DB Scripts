@@ -1,3 +1,0 @@
-INSERT INTO COMPANY(id, company_name, company_address, company_city, company_state, company_zipcode, company_website, company_phone_number) VALUES (1,'Jiffy Lube','3606 W State St','Boise', 'ID', '83703', 'https://www.jiffylube.com/', '(208) 344-8824' );
-
-INSERT INTO COMPANY(id, company_name, company_address, company_city, company_state, company_zipcode, company_website, company_phone_number) VALUES (2,'Jiffy Lube','5007 W Overland Rd','Boise', 'ID', '83705', 'https://www.jiffylube.com/', '(208) 343-8202' );

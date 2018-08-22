@@ -18,15 +18,16 @@
         </div>
     </form>
     <br>
-    
+
 
     {% if average_price != "NA" %}
     <div class="container p-3 mb-2 bg-info text-white">
-        <h3> The average reported price for a {{service_name}} in your area is: ${{average_price}}</h3>
+        <h3> The average reported price for a {{service_name}} in {{listings[0].company.company_city}}, {{listings[0].company.company_state}} is: ${{average_price}}</h3>
     </div><br>
     {% endif %}
 
 <p style=" font-size: 18px;"> Displaying results for average reported prices for companies near you from cheapest to most expensive.... </p>
+<p style=" font-size: 14px;"> *Note, the data presented are averages of actual prices paid by real customers and therefore may not accurately reflect the price at any given time. There is no guarantee of accuracy and results are meant to serve only as a starting point for your search.</p>
 <table class="table table-hover text-center">
     <tr>
         <td width="120px">
