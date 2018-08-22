@@ -3,7 +3,7 @@
 {% block app_content %}
     <table class="table table-hover">
         <tr>
-            <td width="256px"><img src="{{ user.avatar(256) }}"></td>
+            <td width="256px"><img src="{{ url_for('static', filename='profile_pic.jpg') }}"></td>
             <td>
                 <h1>User: {{ user.username }}</h1>
 		        {% if user.about_me %}<p>{{ user.about_me }}</p>{% endif %}
@@ -27,12 +27,12 @@
         <ul class="pager">
             <li class="previous{% if not prev_url %} disabled{% endif %}">
                 <a href="{{ prev_url or '#' }}">
-                    <span aria-hidden="true">&larr;</span> Newer posts
+                    <span aria-hidden="true">&larr;</span> Newer reports
                 </a>
             </li>
             <li class="next{% if not next_url %} disabled{% endif %}">
                 <a href="{{ next_url or '#' }}">
-                    Older posts <span aria-hidden="true">&rarr;</span>
+                    Older reports <span aria-hidden="true">&rarr;</span>
                 </a>
             </li>
         </ul>
