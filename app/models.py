@@ -165,7 +165,7 @@ class Company(db.Model):
     company_city = db.Column(db.String(120))
     company_state = db.Column(db.String(120))
     company_zipcode = db.Column(db.String(120))
-    company_display = column_property(company_name + ", " + company_address)
+    company_display = column_property(company_name + ", " + company_address + ", " + company_city + ", " + company_state)
     company_website = db.Column(db.String(120))
     company_phone_number = db.Column(db.String(120))
     company_email = db.Column(db.String(120))
