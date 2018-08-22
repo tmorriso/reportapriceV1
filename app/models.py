@@ -76,7 +76,7 @@ class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     price = db.Column(db.Float)
     rating = db.Column(db.Integer)
-    body = db.Column(db.String(140))
+    body = db.Column(db.String(340))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     service_id = db.Column(db.Integer, db.ForeignKey('service.id'))

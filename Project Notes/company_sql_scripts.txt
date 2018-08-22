@@ -3,3 +3,13 @@ INSERT INTO COMPANY(id, company_name, company_address, company_city, company_sta
 INSERT INTO COMPANY(id, company_name, company_address, company_city, company_state, company_zipcode, company_website, company_phone_number) VALUES (2,'Jiffy Lube','5007 W Overland Rd','Boise', 'ID', '83705', 'https://www.jiffylube.com/', '(208) 343-8202' );
 
 INSERT INTO COMPANY(id, company_name, company_address, company_city, company_state, company_zipcode, company_website, company_phone_number) VALUES (3,'Valvoline Instant Oil Change','2315 S Apple St','Boise', 'ID', '83706', 'https://store.vioc.com/id/boise/2315-s-apple-st-83706-090090?utm_source=google&utm_medium=local&utm_campaign=pbslocal', '(208) 338-9090' );
+
+INSERT INTO COMPANY(id, company_name, company_address, company_city, company_state, company_zipcode, company_website, company_phone_number) VALUES (4,'Einstein''s Oilery','8488 W Overland Rd','Boise', 'ID', '83709', 'https://www.einsteinsoilery.com/', '(208) 429-1169' );
+
+INSERT INTO COMPANY(id, company_name, company_address, company_city, company_state, company_zipcode, company_website, company_phone_number) VALUES (5,'Broadway Express Lube','2606 S Broadway Ave','Boise', 'ID', '83706', 'https://www.broadwayexpresslube.com/', '(208) 363-9200' );
+
+INSERT INTO COMPANY(id, company_name, company_address, company_city, company_state, company_zipcode, company_website, company_phone_number) VALUES (6,'Rogers'' Northside Garage','1170 N 29th St','Boise', 'ID', '83702', 'http://www.northsidegarage.com/', '(208) 345-2660' );
+
+INSERT INTO COMPANY(id, company_name, company_address, company_city, company_state, company_zipcode, company_website, company_phone_number) VALUES (7,'Mr Mobile Lube','500 E 43rd St', 'Boise', 'ID', '83714', 'https://www.autorepairsboise.com/', '(208) 228-0054' );
+
+INSERT INTO COMPANY(id, company_name, company_address, company_city, company_state, company_zipcode, company_website, company_phone_number) VALUES (8,'Michael''s Automotive','5209 W Emerald St', 'Boise', 'ID', '83706', 'https://www.michaelsautomotiveboise.com/', '(208) 344-4114' );
