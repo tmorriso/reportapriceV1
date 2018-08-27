@@ -4,6 +4,7 @@ from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Le
 from wtforms_alchemy.fields import QuerySelectField
 from app.models import User, Service, Company
 from app import db
+
 # Auxillary functions
 def service_query():
     return Service.query
