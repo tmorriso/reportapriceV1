@@ -153,7 +153,6 @@ class Service_Attributes(db.Model):
     attribute = db.Column(db.String(120))
     value = db.Column(db.String(120))
     service_id = db.Column(db.Integer, db.ForeignKey('service.id'))
-
    
     def __repr__(self):
         return '<Service_Attributes {}>'.format(self.value)

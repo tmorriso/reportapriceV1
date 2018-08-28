@@ -10,7 +10,10 @@ def service_query():
     return Service.query
 
 def company_query():
-    return Company.query
+        # city = g.city
+        # service = g.service
+        return Company.query
+
 
 #This doesn't work, asked question on stack overflow
 def city_query():
@@ -66,9 +69,9 @@ class PostForm(FlaskForm):
         DataRequired()])
     post = TextAreaField('Leave a Review', validators=[
         DataRequired(), Length(min=1, max=140)])
-    
     submit = SubmitField('Submit')
 
+    
 class ExploreForm(FlaskForm):
     service = QuerySelectField(query_factory=service_query, allow_blank=True, blank_text='Enter a Service', get_label='title', validators=[
         DataRequired()])
