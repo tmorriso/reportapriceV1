@@ -1,9 +1,9 @@
 from flask import render_template, flash, redirect, url_for, request
 from werkzeug.urls import url_parse
 from app import app, db
-from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, ExploreForm
+from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, ExploreForm, CompanyForm
 from flask_login import current_user, login_user
-from app.models import User, Post, Listing, Service
+from app.models import User, Post, Listing, Service, Company
 from flask_login import logout_user, login_required
 from datetime import datetime
 
@@ -89,6 +89,31 @@ def report():
         flash('Your report is now live!')
         return redirect(url_for('search'))
     return render_template('report.html', title='Report', form=form)
+
+@app.route('/add_company/<state>/<city>/<service_id>', methods=['GET', 'POST'])
+#@login_required
+def add_company(state, city, service_id):
+    form = CompanyForm()
+    if form.validate_on_submit():
+        if current_user.is_authenticated:
+            company = Company(company_name=form.company_name.data, company_address=form.company_address.data,
+                company_city=form.company_city.data, company_state=form.company_state.data, 
+                company_zipcode=form.company_zipcode.data, company_website=form.company_website.data, 
+                company_phone_number=form.company_phone_number.data, company_email = form.company_email.data, 
+                author=current_user)  
+        else:
+            company = Company(company_name=form.company_name.data, company_address=form.company_address.data,
+                company_city=form.company_city.data, company_state=form.company_state.data, 
+                company_zipcode=form.company_zipcode.data, company_website=form.company_website.data, 
+                company_phone_number=form.company_phone_number.data,
+                company_email = form.company_email.data)
+        db.session.add(company)
+        db.session.commit()
+
+        flash('Thank you, the company has been added!')
+        return redirect(url_for('search'))
+    return render_template('report.html', title='Report', form2=form)
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

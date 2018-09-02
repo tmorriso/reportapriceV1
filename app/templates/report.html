@@ -38,5 +38,47 @@
     </div>
     <br>
     {% endif %}
+
+    {% if form2 %}
+    <div class="container">
+        <div class="col-lg-8 col-lg-offset-2">
+        <h1>Add a Company!</h1>
+        <form action="" method="post">
+            {{ form2.hidden_tag() }}
+            <p>
+                <div class='form-group'>
+                    {{ form2.company_name.label }}<br>
+                    {{ form2.company_name(cols=32, rows=4, class_='form-control') }}
+                    {{ form2.company_address.label }}<br>
+                    {{ form2.company_address(cols=32, rows=4, class_='form-control') }}
+                    {% for error in form2.company_name.errors %}
+                    <span style="color: red;">[{{ error }}]</span><br>
+                    {% endfor %}
+                    {{ form2.company_city.label }}<br>
+                    {{ form2.company_city(cols=32, rows=4, class_='form-control') }}
+                    {% for error in form2.company_city.errors %}
+                    <span style="color: red;">[{{ error }}]</span><br>
+                    {% endfor %}
+                    {{ form2.company_state.label }}<br>
+                    {{ form2.company_state(cols=32, rows=4, class_='form-control') }}
+                    {{ form2.company_zipcode.label }}<br>
+                    {{ form2.company_zipcode(cols=32, rows=4, class_='form-control') }}
+                    {{ form2.company_website.label }}<br>
+                    {{ form2.company_website(cols=32, rows=4, class_='form-control') }}
+                    {{ form2.company_phone_number.label }}<br>
+                    {{ form2.company_phone_number(cols=32, rows=4, class_='form-control') }}
+                    {{ form2.company_email.label }}<br>
+                    {{ form2.company_email(cols=32, rows=4, class_='form-control') }}
+
+                </div>
+            </p>
+            <p>{{ form2.submit(class_="btn btn-default") }}</p>
+        </form>
+        
+        </div>
+    </div>
+    <br>
+    {% endif %}
+
    
 {% endblock %}

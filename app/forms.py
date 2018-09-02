@@ -14,6 +14,9 @@ def company_query():
         # service = g.service
         return Company.query
 
+city_choices = [('','Enter a city'), ('Boise','Boise, ID')]
+city_choices_2 = [('Boise','Boise'), ('Grand Junction','Grand Junction'), ('Portland','Portland')]
+state_choices = [('CO','Colorado'), ('ID','Idaho'), ('OR', 'Oregon')]
 
 #This doesn't work, asked question on stack overflow
 def city_query():
@@ -77,7 +80,28 @@ class ExploreForm(FlaskForm):
         DataRequired()])
     #city = QuerySelectField(query_factory=city_query, allow_blank=True, blank_text='Enter a City', get_label='company_city', validators=[
     #   DataRequired()])
-    city = SelectField(choices = [('','Enter a city'), ('Boise','Boise, ID')], validators=[DataRequired()])
+    city = SelectField(choices = city_choices, validators=[DataRequired()])
     
     submit = SubmitField('Submit')
+
+class CompanyForm(FlaskForm):
+    company_name=StringField('Company Name', validators=[DataRequired()])
+    company_address=StringField('Street Address', validators=[DataRequired()])
+    company_city=StringField('City', validators=[DataRequired()])
+    company_state=SelectField('State', choices = state_choices, validators=[DataRequired()])
+    company_zipcode=StringField('Zip Code', validators=[DataRequired()]) 
+    company_website=StringField('Website URL', validators=[DataRequired()]) 
+    company_phone_number=StringField('Phone Number', validators=[DataRequired()])
+    company_email=StringField('Email (Optional)')
+    submit = SubmitField('Submit')
+
+    # def validate_company_address(self, company_name, company_address):
+    #     company = Company.query.filter_by(company_name=company_name.data, company_address=company_address.data).first()
+    #     if company is None:
+    #         raise ValidationError('This company already exists in our database.')
+
+    def validate_company_city(self, company_city):
+        city = Company.query.filter_by(company_city=company_city.data).first()
+        if city is None:
+            raise ValidationError('We are not available in this city yet.')
 
