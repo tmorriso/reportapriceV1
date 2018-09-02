@@ -90,9 +90,9 @@ def report():
         return redirect(url_for('search'))
     return render_template('report.html', title='Report', form=form)
 
-@app.route('/add_company/<state>/<city>/<service_id>', methods=['GET', 'POST'])
+@app.route('/add_company', methods=['GET', 'POST'])
 #@login_required
-def add_company(state, city, service_id):
+def add_company():
     form = CompanyForm()
     if form.validate_on_submit():
         if current_user.is_authenticated:

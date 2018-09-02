@@ -15,7 +15,7 @@ def company_query():
         return Company.query
 
 city_choices = [('','Enter a city'), ('Boise','Boise, ID')]
-city_choices_2 = [('Boise','Boise'), ('Grand Junction','Grand Junction'), ('Portland','Portland')]
+city_choices_2 = ['Boise','Grand Junction','Portland']
 state_choices = [('CO','Colorado'), ('ID','Idaho'), ('OR', 'Oregon')]
 
 #This doesn't work, asked question on stack overflow
@@ -101,7 +101,6 @@ class CompanyForm(FlaskForm):
     #         raise ValidationError('This company already exists in our database.')
 
     def validate_company_city(self, company_city):
-        city = Company.query.filter_by(company_city=company_city.data).first()
-        if city is None:
+        if company_city.data not in city_choices_2:
             raise ValidationError('We are not available in this city yet.')
 
