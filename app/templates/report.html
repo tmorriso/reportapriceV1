@@ -47,13 +47,13 @@
             {{ form2.hidden_tag() }}
             <p>
                 <div class='form-group'>
-                    {{ form2.company_name.label }}<br>
+                    {{ form2.company_name.label }}
                     {{ form2.company_name(cols=32, rows=4, class_='form-control') }}
-                    {{ form2.company_address.label }}<br>
-                    {{ form2.company_address(cols=32, rows=4, class_='form-control') }}
                     {% for error in form2.company_name.errors %}
                     <span style="color: red;">[{{ error }}]</span><br>
                     {% endfor %}
+                    {{ form2.company_address.label }}<br>
+                    {{ form2.company_address(cols=32, rows=4, class_='form-control') }}
                     {{ form2.company_city.label }}<br>
                     {{ form2.company_city(cols=32, rows=4, class_='form-control') }}
                     {% for error in form2.company_city.errors %}
@@ -67,8 +67,14 @@
                     {{ form2.company_website(cols=32, rows=4, class_='form-control') }}
                     {{ form2.company_phone_number.label }}<br>
                     {{ form2.company_phone_number(cols=32, rows=4, class_='form-control') }}
+                    {% for error in form2.company_phone_number.errors %}
+                    <span style="color: red;">[{{ error }}]</span><br>
+                    {% endfor %}
                     {{ form2.company_email.label }}<br>
                     {{ form2.company_email(cols=32, rows=4, class_='form-control') }}
+                    {% for error in form2.company_email.errors %}
+                    <span style="color: red;">[{{ error }}]</span><br>
+                    {% endfor %}
 
                 </div>
             </p>

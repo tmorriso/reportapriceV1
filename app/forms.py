@@ -1,9 +1,10 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, SubmitField, SelectField, DecimalField, IntegerField, TextField
+from wtforms import Form, validators, StringField, PasswordField, BooleanField, SubmitField, TextAreaField, SubmitField, SelectField, DecimalField, IntegerField, TextField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
 from wtforms_alchemy.fields import QuerySelectField
 from app.models import User, Service, Company
 from app import db
+import phonenumbers
 
 # Auxillary functions
 def service_query():
@@ -78,8 +79,6 @@ class PostForm(FlaskForm):
 class ExploreForm(FlaskForm):
     service = QuerySelectField(query_factory=service_query, allow_blank=True, blank_text='Enter a Service', get_label='title', validators=[
         DataRequired()])
-    #city = QuerySelectField(query_factory=city_query, allow_blank=True, blank_text='Enter a City', get_label='company_city', validators=[
-    #   DataRequired()])
     city = SelectField(choices = city_choices, validators=[DataRequired()])
     
     submit = SubmitField('Submit')
@@ -95,12 +94,35 @@ class CompanyForm(FlaskForm):
     company_email=StringField('Email (Optional)')
     submit = SubmitField('Submit')
 
-    # def validate_company_address(self, company_name, company_address):
-    #     company = Company.query.filter_by(company_name=company_name.data, company_address=company_address.data).first()
-    #     if company is None:
-    #         raise ValidationError('This company already exists in our database.')
+    def validate(self):
+        rv = Form.validate(self)
+        if not rv:
+            return False
+
+        company = Company.query.filter_by(company_name=self.company_name.data, company_address=self.company_address.data).first()
+        if company is not None:
+            self.company_name.errors.append('Company already exists at that address')
+            return False
+
+        return True
 
     def validate_company_city(self, company_city):
         if company_city.data not in city_choices_2:
             raise ValidationError('We are not available in this city yet.')
+
+    def validate_company_phone_number(self, field):
+        if len(field.data) > 16 or len(field.data) < 4:
+            raise ValidationError('Invalid phone number.')
+        try:
+            try:
+                input_number = phonenumbers.parse(field.data)
+                if not (phonenumbers.is_valid_number(input_number)):
+                    raise ValidationError('Invalid phone number.')
+            except:
+                input_number = phonenumbers.parse("+1"+field.data)
+                if not (phonenumbers.is_valid_number(input_number)):
+                    raise ValidationError('Invalid phone number.')
+        except:
+            raise ValidationError('Invalid phone number.')
+
 

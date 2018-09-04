@@ -111,7 +111,7 @@ def add_company():
         db.session.commit()
 
         flash('Thank you, the company has been added!')
-        return redirect(url_for('search'))
+        return redirect(url_for('index'))
     return render_template('report.html', title='Report', form2=form)
 
 
