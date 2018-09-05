@@ -5,15 +5,20 @@ from wtforms_alchemy.fields import QuerySelectField
 from app.models import User, Service, Company
 from app import db
 import phonenumbers
+from flask import g
 
 # Auxillary functions
 def service_query():
     return Service.query
 
-def company_query():
-        # city = g.city
-        # service = g.service
+def company_query():   
         return Company.query
+
+def company_query2():
+        city = g.city
+        service_id = g.service_id
+        #return Company.query.filter(Company.company_city==city)
+        return Company.query.filter(Company.company_city == city, Company.services.any(id=service_id))
 
 city_choices = [('','Enter a city'), ('Boise','Boise, ID')]
 city_choices_2 = ['Boise','Grand Junction','Portland']
@@ -75,6 +80,15 @@ class PostForm(FlaskForm):
         DataRequired(), Length(min=1, max=140)])
     submit = SubmitField('Submit')
 
+class PostForm2(FlaskForm):
+    company = QuerySelectField(query_factory=company_query2, allow_blank=True, blank_text='Select a Company', get_label='company_display')
+    price = DecimalField('What price did you pay?', validators=[
+        DataRequired()])
+    rating = SelectField('Leave a rating ', choices = [('1', '1 Star'), ('2', '2 Stars'), ('3', '3 Stars'), ('4', ' 4 Stars'), ('5', '5 Stars')], validators=[
+        DataRequired()])
+    post = TextAreaField('Leave a Review', validators=[
+        DataRequired(), Length(min=1, max=140)])
+    submit = SubmitField('Submit')
     
 class ExploreForm(FlaskForm):
     service = QuerySelectField(query_factory=service_query, allow_blank=True, blank_text='Enter a Service', get_label='title', validators=[

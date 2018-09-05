@@ -112,6 +112,8 @@ class UserModelCase(unittest.TestCase):
         # check that the connection was made
         self.assertEqual(c1.services.count(), 2)
         self.assertEqual(s1.companies.first().company_name, 'Paint Team')
+        self.assertEqual(c1.services.first().id, 1)
+        print(c1.services.first().id)
 
         # remove companies
         check3 = s2.remove_company(c1)

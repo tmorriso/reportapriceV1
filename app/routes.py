@@ -1,7 +1,7 @@
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, g
 from werkzeug.urls import url_parse
 from app import app, db
-from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, ExploreForm, CompanyForm
+from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, ExploreForm, CompanyForm, PostForm2
 from flask_login import current_user, login_user
 from app.models import User, Post, Listing, Service, Company
 from flask_login import logout_user, login_required
@@ -67,6 +67,7 @@ def report():
     if form.validate_on_submit():
         service = form.service.data
         company = form.company.data
+        service.add_company(company)
         listing = Listing.query.filter(Listing.company_id == company.id, Listing.service_id == service.id).all()
         if len(listing) == 0:
             # If Listing doesn't exist create it
@@ -89,6 +90,38 @@ def report():
         flash('Your report is now live!')
         return redirect(url_for('search'))
     return render_template('report.html', title='Report', form=form)
+
+@app.route('/report/<city>/<service_id>', methods=['GET', 'POST'])
+#@login_required
+def report1(city, service_id):
+    g.service_id=service_id
+    g.city=city
+    form = PostForm2()
+    if form.validate_on_submit():
+        service = Service.query.filter(Service.id == service_id).first()
+        company = form.company.data
+        listing = Listing.query.filter(Listing.company_id == company.id, Listing.service_id == service.id).all()
+        if len(listing) == 0:
+            # If Listing doesn't exist create it
+            listing = Listing(service_id=service.id, company_id=company.id)
+            db.session.add(listing)
+            db.session.commit()
+        else:
+            listing = listing[0]
+        if current_user.is_authenticated:
+            post = Post(body=form.post.data, author=current_user, 
+                service_id=service.id, company_id=company.id, 
+                price=form.price.data, rating=form.rating.data, listing=listing)
+        else:
+            post = Post(body=form.post.data,
+                service_id=service.id, company_id=company.id, 
+                price=form.price.data, rating=form.rating.data, listing=listing)
+        db.session.add(post)
+        db.session.commit()
+
+        flash('Your report is now live!')
+        return redirect(url_for('search'))
+    return render_template('report.html', title='Report', form3=form)
 
 @app.route('/add_company', methods=['GET', 'POST'])
 #@login_required
