@@ -60,40 +60,54 @@ def find(service):
     return render_template("find.html", title='Explore', listings=listings.items, average_price=average_price, service_name=service_name,
                           next_url=next_url, prev_url=prev_url, form=form)
 
+# @app.route('/report', methods=['GET', 'POST'])
+# #@login_required
+# def report():
+#     form = PostForm()
+#     if form.validate_on_submit():
+#         service = form.service.data
+#         company = form.company.data
+#         service.add_company(company)
+#         listing = Listing.query.filter(Listing.company_id == company.id, Listing.service_id == service.id).all()
+#         if len(listing) == 0:
+#             # If Listing doesn't exist create it
+#             listing = Listing(service_id=service.id, company_id=company.id)
+#             db.session.add(listing)
+#             db.session.commit()
+#         else:
+#             listing = listing[0]
+#         if current_user.is_authenticated:
+#             post = Post(body=form.post.data, author=current_user, 
+#                 service_id=service.id, company_id=company.id, 
+#                 price=form.price.data, rating=form.rating.data, listing=listing)
+#         else:
+#             post = Post(body=form.post.data,
+#                 service_id=service.id, company_id=company.id, 
+#                 price=form.price.data, rating=form.rating.data, listing=listing)
+#         db.session.add(post)
+#         db.session.commit()
+
+#         flash('Your report is now live!')
+#         return redirect(url_for('search'))
+#     return render_template('report.html', title='Report', form=form)
+
 @app.route('/report', methods=['GET', 'POST'])
 #@login_required
 def report():
-    form = PostForm()
+    if 'service_id' in locals():
+        print(service_id, city)
+    form = ExploreForm()
     if form.validate_on_submit():
         service = form.service.data
-        company = form.company.data
-        service.add_company(company)
-        listing = Listing.query.filter(Listing.company_id == company.id, Listing.service_id == service.id).all()
-        if len(listing) == 0:
-            # If Listing doesn't exist create it
-            listing = Listing(service_id=service.id, company_id=company.id)
-            db.session.add(listing)
-            db.session.commit()
-        else:
-            listing = listing[0]
-        if current_user.is_authenticated:
-            post = Post(body=form.post.data, author=current_user, 
-                service_id=service.id, company_id=company.id, 
-                price=form.price.data, rating=form.rating.data, listing=listing)
-        else:
-            post = Post(body=form.post.data,
-                service_id=service.id, company_id=company.id, 
-                price=form.price.data, rating=form.rating.data, listing=listing)
-        db.session.add(post)
-        db.session.commit()
+        city = form.city.data
 
-        flash('Your report is now live!')
-        return redirect(url_for('search'))
-    return render_template('report.html', title='Report', form=form)
+       
+        return redirect(url_for('report_2', service_id = service.id, city = city))
+    return render_template('report.html', title='Report', form1=form)
 
-@app.route('/report/<city>/<service_id>', methods=['GET', 'POST'])
+@app.route('/report_2/<city>/<service_id>', methods=['GET', 'POST'])
 #@login_required
-def report1(city, service_id):
+def report_2(city, service_id):
     g.service_id=service_id
     g.city=city
     form = PostForm2()

@@ -2,38 +2,32 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}  
-   
-    {% if form %}
+
+    {% if form1 %}
     <div class="container">
-        <div class="col-lg-4 col-lg-offset-4">
-        <h1>Report a price</h1>
-        <p> Submit a price you paid for a service.</p>
-        
-        <form action="" method="post">
-            {{ form.hidden_tag() }}
-            <p>
-            
-                <div class='form-group'>
-                    {{ form.service.label }}<br>
-                    {{ form.service(cols=32, rows=4, class_='chosen-select')}}<br>
-                    {{ form.company.label }}<br>
-                    {{ form.company(cols=32, rows=4, class_='chosen-select') }}<br>
-                    {{ form.price.label }}<br>
-                    {{ form.price(cols=32, rows=4, class_='form-control') }}<br>
-                    {{ form.rating.label }}<br>
-                    {{ form.rating(cols=32, rows=4, class_='form-control') }}<br>
-                    {{ form.post.label }}<br>
-                    {{ form.post(cols=32, rows=4, class_='form-control') }}<br>
-                    
-                    {% for error in form.post.errors %}
-                    <span style="color: red;">[{{ error }}]</span>
-                    {% endfor %}
+        <div class="col-lg-6 col-lg-offset-3">
+            <h1>Report a price</h1>
+            <p> Help us grow our database of prices!</p><br><br>
+            <div class="panel panel-default drop-shadow">
+                <!-- <p> Step 1 of 2 ... </p> -->
+                <div class="row" >
+                    <div class="col-lg-8 col-lg-offset-2">
+                        <form action="" method="post">
+                            {{ form1.hidden_tag() }}
+                            <p>
+                                <div class='form-group'>
+                                    <br>
+                                    <p> What city are you located in? </p>
+                                    {{ form1.city(cols=32, rows=4, class_='chosen-select') }}<br><br> 
+                                    <p> What service would you like to report? </p>
+                                    {{ form1.service(cols=32, rows=4, class_='chosen-select')}}<br>                 
+                                </div>
+                            </p><br>
+                            <p class="text-center">{{ form1.submit(class_="btn btn-lg btn-primary") }}</p><br>
+                        </form>
+                    </div>
                 </div>
-            
-            </p>
-            <p>{{ form.submit(class_="btn btn-default") }}</p>
-        </form>
-        
+            </div>
         </div>
     </div>
     <br>
@@ -75,12 +69,10 @@
                     {% for error in form2.company_email.errors %}
                     <span style="color: red;">[{{ error }}]</span><br>
                     {% endfor %}
-
                 </div>
             </p>
-            <p>{{ form2.submit(class_="btn btn-default") }}</p>
+            <p>{{ form2.submit(class_="btn btn-lg btn-primary") }}</p>
         </form>
-        
         </div>
     </div>
     <br>
@@ -88,38 +80,45 @@
 
     {% if form3 %}
     <div class="container">
-        <div class="col-lg-4 col-lg-offset-4">
-        <h1>Report a price</h1>
-        <p> Submit a price you paid for a service.</p>
-        
-        <form action="" method="post">
-            {{ form3.hidden_tag() }}
-            <p>
-            
-                <div class='form-group'>
-                    {{ form3.company.label }}<br>
-                    {{ form3.company(cols=32, rows=4, class_='chosen-select') }}<br>
-                    {{ form3.price.label }}<br>
-                    {{ form3.price(cols=32, rows=4, class_='form-control') }}<br>
-                    {{ form3.rating.label }}<br>
-                    {{ form3.rating(cols=32, rows=4, class_='form-control') }}<br>
-                    {{ form3.post.label }}<br>
-                    {{ form3.post(cols=32, rows=4, class_='form-control') }}<br>
-                    
-                    {% for error in form3.post.errors %}
-                    <span style="color: red;">[{{ error }}]</span>
-                    {% endfor %}
+        <div class="col-lg-6 col-lg-offset-3">
+            <div class="panel panel-default drop-shadow">
+                <!-- <p> Step 2 of 2 ... </p> -->
+                <div class="row" >
+                    <div class="col-lg-8 col-lg-offset-2">
+                        <form action="" method="post">
+                            {{ form3.hidden_tag() }}
+                            <p>
+                                <div class='form-group'>
+                                    <br><p> What company provided the service? </p>
+                                    {{ form3.company(cols=32, rows=4, class_='chosen-select') }}
+                                    {% for error in form3.company.errors %}
+                                        <span style="color: red;">[{{ error }}]</span><br>
+                                    {% endfor %}
+                                    <div class=" col-lg-offset-4">
+                                        <p>or</p>
+                                        <a href="{{ url_for('add_company') }}" class="btn btn-info" role="button">Add New Company</a>
+                                        <br><br>
+                                    </div>
+                                    <p> What price did you pay? </p>
+                                    {{ form3.price(cols=32, rows=4, class_='form-control') }}
+                                    <p> Leave a rating</p>
+                                    {{ form3.rating(cols=32, rows=4, class_='form-control') }}
+                                    <p> Leave a Review </p>
+                                    {{ form3.post(cols=32, rows=4, class_='form-control') }}
+                                    {% for error in form3.post.errors %}
+                                    <span style="color: red;">[{{ error }}]</span>
+                                    {% endfor %}
+                                </div>
+                            </p>
+                            <p class="text-center">{{ form3.submit(class_="btn btn-lg btn-primary") }}</p>
+                            <br>
+                        </form>
+                    </div>
                 </div>
-            
-            </p>
-            <p>{{ form3.submit(class_="btn btn-default") }}</p>
-        </form>
-        
+            </div>
         </div>
     </div>
     <br>
     {% endif %}
 
-
-   
 {% endblock %}

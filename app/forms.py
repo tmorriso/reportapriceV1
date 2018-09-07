@@ -81,7 +81,8 @@ class PostForm(FlaskForm):
     submit = SubmitField('Submit')
 
 class PostForm2(FlaskForm):
-    company = QuerySelectField(query_factory=company_query2, allow_blank=True, blank_text='Select a Company', get_label='company_display')
+    company = QuerySelectField('What company provided the service?', query_factory=company_query2, allow_blank=True, blank_text='Enter Company Name', get_label='company_display', validators=[
+        DataRequired()])
     price = DecimalField('What price did you pay?', validators=[
         DataRequired()])
     rating = SelectField('Leave a rating ', choices = [('1', '1 Star'), ('2', '2 Stars'), ('3', '3 Stars'), ('4', ' 4 Stars'), ('5', '5 Stars')], validators=[
@@ -91,9 +92,9 @@ class PostForm2(FlaskForm):
     submit = SubmitField('Submit')
     
 class ExploreForm(FlaskForm):
-    service = QuerySelectField(query_factory=service_query, allow_blank=True, blank_text='Enter a Service', get_label='title', validators=[
+    service = QuerySelectField('What service would you like to report?', query_factory=service_query, allow_blank=True, blank_text='Enter a Service', get_label='title', validators=[
         DataRequired()])
-    city = SelectField(choices = city_choices, validators=[DataRequired()])
+    city = SelectField('What city are you located in?',choices = city_choices, validators=[DataRequired()])
     
     submit = SubmitField('Submit')
 
