@@ -119,6 +119,7 @@ class Service(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     parent_id = db.Column(db.Integer)
     title = db.Column(db.String(120))
+    # display = column_property(title.replace("","_")) 
     posts = db.relationship('Post', backref='service', lazy='dynamic')
     listings = db.relationship('Listing', backref='service', lazy='dynamic')
     companies = db.relationship(
@@ -173,7 +174,6 @@ class Company(db.Model):
 
     def __repr__(self):
         return '<Company {}>'.format(self.company_name)
-
 
 
 @login.user_loader

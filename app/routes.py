@@ -13,7 +13,7 @@ def index():
     form = ExploreForm()
     if form.validate_on_submit():
         form_service = form.service.data
-        return redirect(url_for('find', service=form_service.id))
+        return redirect(url_for('find', service='Synthetic_Blend_Oil_Change'))
 
     return render_template("index_temp.html", title='Home', form=form)
 
@@ -100,8 +100,6 @@ def report():
     if form.validate_on_submit():
         service = form.service.data
         city = form.city.data
-
-       
         return redirect(url_for('report_2', service_id = service.id, city = city))
     return render_template('report.html', title='Report', form1=form)
 
