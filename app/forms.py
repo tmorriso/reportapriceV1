@@ -17,10 +17,11 @@ def company_query():
 def company_query2():
         city = g.city
         service_id = g.service_id
-        #return Company.query.filter(Company.company_city==city)
-        return Company.query.filter(Company.company_city == city, Company.services.any(id=service_id))
+        return Company.query.filter(Company.company_city==city)
+        # Only filtering by city for now until more "Categories" of services are added
+        #return Company.query.filter(Company.company_city == city, Company.services.any(id=service_id))
 
-city_choices = [('','Enter a city'), ('Boise','Boise, ID')]
+city_choices = [('','Enter a city'), ('Boise','Boise, ID'), ('Boulder','Boulder, CO'), ('Grand Junction','Grand Junction, CO'), ('Hastings','Hastings, UK'), ('Portland','Portland, OR')]
 city_choices_2 = ['Boise','Grand Junction','Portland']
 state_choices = [('CO','Colorado'), ('ID','Idaho'), ('OR', 'Oregon')]
 
@@ -95,7 +96,6 @@ class ExploreForm(FlaskForm):
     service = QuerySelectField('What service would you like to report?', query_factory=service_query, allow_blank=True, blank_text='Enter a Service', get_label='title', validators=[
         DataRequired()])
     city = SelectField('What city are you located in?',choices = city_choices, validators=[DataRequired()])
-    
     submit = SubmitField('Submit')
 
 class CompanyForm(FlaskForm):
