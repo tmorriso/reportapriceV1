@@ -12,8 +12,9 @@ from datetime import datetime
 def index():
     form = ExploreForm()
     if form.validate_on_submit():
-        form_service = form.service.data
-        return redirect(url_for('find', service=form_service.id))
+        service = form.service.data
+        city = form.city.data
+        return redirect(url_for('find', service=service.id, city=city))
 
     return render_template("index_temp.html", title='Home', form=form)
 
@@ -22,8 +23,9 @@ def search():
     page = request.args.get('page', 1, type=int)
     form = ExploreForm()
     if form.validate_on_submit():
+        city = form.city.data
         service = form.service.data
-        return redirect(url_for('find', service=service.id))
+        return redirect(url_for('find', service=service.id, city=city))
     posts = Post.query.order_by(Post.timestamp.desc()).paginate(
                 page, app.config['POSTS_PER_PAGE'], False)
         
@@ -35,30 +37,36 @@ def search():
     return render_template("index.html", title='Explore', posts=posts.items,
                           next_url=next_url, prev_url=prev_url, form=form)
     
-@app.route('/find/<service>', methods=['GET', 'POST'])
-def find(service):
+@app.route('/find/<city>/<service>', methods=['GET', 'POST'])
+def find(city, service):
     page = request.args.get('page', 1, type=int)
     form = ExploreForm()
     if form.validate_on_submit():
-        form_service = form.service.data
-        return redirect(url_for('find', service=form_service.id))
+        service = form.service.data
+        city = form.city.data
+        return redirect(url_for('find', service=service.id, city=city))
     else:
-        listings = Listing.query.filter(Listing.service_id==service)
-        for listing in listings:
-            posts = Post.query.filter(Post.service_id==listing.service_id, Post.company_id==listing.company_id)
-            listing.calculate_averages(posts)
-        listings = listings.order_by(Listing.average_price).paginate(page, app.config['POSTS_PER_PAGE'], False)
-        all_posts = Post.query.filter(Post.service_id == listing.service_id)
-        average_price = find_average(all_posts)
-        service_name = listing.service.title
+        listings = Listing.query.join(Company).filter(Listing.service_id==service, Company.company_city==city)
+        try:
+            for listing in listings:
+                posts = Post.query.filter(Post.service_id==listing.service_id, Post.company_id==listing.company_id)
+                listing.calculate_averages(posts)
+            listings = listings.order_by(Listing.average_price).paginate(page, app.config['POSTS_PER_PAGE'], False)
+            all_posts = Post.query.filter(Post.service_id == listing.service_id)
+            average_price = find_average(all_posts)
+            service_name = listing.service.title
+        except:
+            average_price = "NA"
+            service_query = Service.query.filter(Service.id==service).first()
+            service_name = service_query.title
 
-    next_url = url_for('find', service=service, page=listings.next_num) \
+    next_url = url_for('find', service=service,  page=listings.next_num) \
         if listings.has_next else None
     prev_url = url_for('find', service=service, page=listings.prev_num) \
         if listings.has_prev else None
 
-    return render_template("find.html", title='Explore', listings=listings.items, average_price=average_price, service_name=service_name,
-                          next_url=next_url, prev_url=prev_url, form=form)
+    return render_template("find.html", title='Explore', listings=listings.items, average_price=average_price,  
+                            city=city, service_name=service_name, next_url=next_url, prev_url=prev_url, form=form)
 
 # @app.route('/report', methods=['GET', 'POST'])
 # #@login_required

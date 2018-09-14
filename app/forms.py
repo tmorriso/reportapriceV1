@@ -22,7 +22,7 @@ def company_query2():
         #return Company.query.filter(Company.company_city == city, Company.services.any(id=service_id))
 
 city_choices = [('','Enter a city'), ('Boise','Boise, ID'), ('Boulder','Boulder, CO'), ('Grand Junction','Grand Junction, CO'), ('Hastings','Hastings, UK'), ('Portland','Portland, OR')]
-city_choices_2 = ['Boise','Grand Junction','Portland']
+city_choices_2 = ['Boise','Grand Junction','Portland', 'Boulder', 'Hastings', 'Portland']
 state_choices = [('CO','Colorado'), ('ID','Idaho'), ('OR', 'Oregon')]
 
 #This doesn't work, asked question on stack overflow
@@ -101,7 +101,7 @@ class ExploreForm(FlaskForm):
 class CompanyForm(FlaskForm):
     company_name=StringField('Company Name', validators=[DataRequired()])
     company_address=StringField('Street Address', validators=[DataRequired()])
-    company_city=StringField('City', validators=[DataRequired()])
+    company_city = SelectField('What city are you located in?',choices = city_choices, validators=[DataRequired()])
     company_state=SelectField('State', choices = state_choices, validators=[DataRequired()])
     company_zipcode=StringField('Zip Code', validators=[DataRequired()]) 
     company_website=StringField('Website URL', validators=[DataRequired()]) 
@@ -121,9 +121,9 @@ class CompanyForm(FlaskForm):
 
         return True
 
-    def validate_company_city(self, company_city):
-        if company_city.data not in city_choices_2:
-            raise ValidationError('We are not available in this city yet.')
+    # def validate_company_city(self, company_city):
+    #     if company_city.data not in city_choices_2:
+    #         raise ValidationError('We are not available in this city yet.')
 
     def validate_company_phone_number(self, field):
         if len(field.data) > 16 or len(field.data) < 4:
